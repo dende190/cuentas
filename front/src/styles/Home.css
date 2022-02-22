@@ -1,0 +1,17 @@
+.title {
+  margin-left: 15px;
+}
+
+.container_expenses_data {
+  display: flex;
+}
+
+.expases_data_price {
+  width: 12%;
+}
+
+.container_debtor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
