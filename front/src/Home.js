@@ -1,58 +1,37 @@
 import {Fragment, useState} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './components/Header';
-import Debtor from './components/Debtor';
+import DebtorForm from './components/DebtorForm';
+import DebtorList from './components/DebtorList';
 import './styles/form.css';
 import './styles/Home.css'
 
 function Home() {
-  const [debtor, setDebtor] = useState({
-    expanses: '',
-    expansesWithDots: '',
-    name: '',
-  });
+  const [debtorList, setDebtorList] = useState([{
+    id: 1,
+    paid: false,
+    name: 'yo',
+  }]);
+  const handlerAddDebtor = async (newDebtor) => {
+    const debtorIdResponse = await fetch(
+      `${process.env.REACT_APP_URL_API}cuenta/crear`,
+      {
+        method: 'post',
+        body: JSON.stringify({newDebtor}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
 
-  const handlerChangeDebtorExpanses = (event) => {
-    const expanses = event.target.value.replaceAll('.', '');
-    if (!Number(expanses)) {
+    const debtorId = await debtorIdResponse.json();
+    if (debtorList.find(debtor => debtor.id === debtorId)) {
       return;
     }
 
-    let expansesLength = expanses.length;
-    let expansesLengthDismiss = expanses.length;
-    let expansesWithDots = [];
-    for (
-      let numberIterator = 1;
-      numberIterator < expansesLength;
-      numberIterator++
-    ) {
-      if (numberIterator % 3) {
-        continue;
-      }
-
-      (
-        expansesWithDots
-        .unshift(
-          expanses.slice(expansesLength - numberIterator, expansesLengthDismiss)
-        )
-      );
-      expansesLengthDismiss = (expansesLength - numberIterator);
-    }
-    expansesWithDots.unshift(expanses.slice(0, expansesLengthDismiss));
-    setDebtor({
-      ...debtor,
-      expanses: expanses,
-      expansesWithDots: expansesWithDots.join('.'),
-    });
-  }
-
-  const handlerChangeDebtorName = (event) => {
-    setDebtor({
-      ...debtor,
-      name: event.target.value,
-    });
-  }
-
+    newDebtor.id = debtorId;
+    setDebtorList([...debtorList, newDebtor]);
+  };
 
   return (
     <Fragment>
@@ -84,26 +63,8 @@ function Home() {
             </div>
           </div>
         </form>
-        <form>
-          <div className="debtor_create">
-            <input
-              type="text"
-              min="0"
-              className="debtor_create_input"
-              value={debtor.expansesWithDots}
-              onChange={handlerChangeDebtorExpanses}
-            />
-            <input
-              type="text"
-              className="debtor_create_input"
-              value={debtor.name}
-              onChange={handlerChangeDebtorName}
-            />
-            <button disabled={!debtor.name || !debtor.expanses}>
-              Agregar
-            </button>
-          </div>
-        </form>
+        <DebtorForm handlerAddDebtor={handlerAddDebtor} />
+        <DebtorList list={debtorList} setList={setDebtorList} />
       </div>
     </Fragment>
   );

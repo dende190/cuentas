@@ -1,0 +1,21 @@
+.debtor {
+  padding: 16px;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+}
+
+.debtor_container {
+  padding: 8px;
+  background-color: #ededed;
+}
+
+.debtor_input {
+  margin-right: 15px;
+}
+
+.debtor_add {
+  background-color: #ea5676;
+  border: none;
+  padding: 4px;
+}

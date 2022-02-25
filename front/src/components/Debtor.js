@@ -1,13 +1,17 @@
-function Debtor() {
+import {Fragment, useState} from 'react';
+
+function Debtor({data, handlerChangePaid}) {
   return (
-    <div className="container_debtor">
-      <input type="checkbox"/>
-      <input
-        type="text"
-        className="input"
-        placeholder="Nombre Deudor"
-      />
-    </div>
+    <Fragment>
+      <label>
+        <input
+          type="checkbox"
+          defaultChecked={data.paid}
+          onChange={handlerChangePaid}
+        />
+        {data.name}
+      </label>
+    </Fragment>
   );
 }
 
