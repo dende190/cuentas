@@ -56,24 +56,6 @@ mysqlLib = {
       );
     });
   },
-  updateWithId: function(values, id, table) {
-    return new Promise((resolve, reject) => {
-      this.connection.query(
-        `UPDATE ${table} SET ? WHERE id = ?`,
-        [
-          values,
-          id,
-        ],
-        (err, result) => {
-          if (err) {
-            return reject(err);
-          }
-
-          resolve(result.insertId);
-        }
-      );
-    });
-  },
   update: function(set, setParam, where, whereParam, table) {
     return new Promise((resolve, reject) => {
       this.connection.query(
