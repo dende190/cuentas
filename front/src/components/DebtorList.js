@@ -2,8 +2,24 @@ import {useState} from 'react';
 import Debtor from './Debtor';
 
 function DebtorList({list, setList}) {
-  const handlerChangePaid = (event) => {
-    console.log(event.target)
+  const handlerChangePaid = async (event) => {
+    const dDebtorCheck = event.target;
+    await fetch(
+      `${process.env.REACT_APP_URL_API}deudor/cambiar_estado_de_pago`,
+      {
+        method: 'post',
+        body: (
+          JSON
+          .stringify({
+            debtorInBillId: dDebtorCheck.dataset.id,
+            paid: dDebtorCheck.checked
+          })
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
   };
 
   return (

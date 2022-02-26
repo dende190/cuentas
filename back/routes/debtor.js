@@ -30,6 +30,16 @@ function debtorRoute(app) {
       expense: expense,
     });
   });
+
+  router.post('/cambiar_estado_de_pago', async (req, res, next) => {
+    // if (!req.body.token) {
+    //   res.status(301).json({error: true});
+    //   return;
+    // }
+    const debtorData = req.body;
+    await debtorService.changePay(debtorData.debtorInBillId, debtorData.paid);
+    res.status(200).json({});
+  });
 }
 
 module.exports = debtorRoute;

@@ -5,6 +5,7 @@ function Debtor({data, handlerChangePaid}) {
     <Fragment>
       <label>
         <input
+          data-id={data.id}
           type="checkbox"
           defaultChecked={data.paid}
           onChange={handlerChangePaid}

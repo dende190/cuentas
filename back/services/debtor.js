@@ -72,7 +72,20 @@ debtorService = {
     .catch(err => console.log(err));
 
     return debtorInBillId;
-  }
+  },
+  changePay: async function(debtorInBillId, paid) {
+    if (!debtorInBillId) {
+      return;
+    }
+
+    await mysqlLib.update(
+      'paid = ?',
+      paid,
+      'id = ?',
+      debtorInBillId,
+      'bill_debtor'
+    );
+  },
 };
 
 module.exports = debtorService;
