@@ -73,6 +73,24 @@ mysqlLib = {
         }
       );
     });
+  },
+  update: function(set, setParam, where, whereParam, table) {
+    return new Promise((resolve, reject) => {
+      this.connection.query(
+        `UPDATE ${table} SET ${set} WHERE ${where}`,
+        [
+          setParam,
+          whereParam,
+        ],
+        (err, result) => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(result.insertId);
+        }
+      );
+    });
   }
 }
 
