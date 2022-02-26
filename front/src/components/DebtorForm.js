@@ -3,8 +3,8 @@ import '../styles/DebtorForm.css'
 
 function DebtorForm({handlerAddDebtor}) {
   const [debtor, setDebtor] = useState({
-    payment: '',
-    paymentWithDots: '',
+    expense: '',
+    expenseWithDots: '',
     name: '',
   });
 
@@ -13,30 +13,30 @@ function DebtorForm({handlerAddDebtor}) {
 
     handlerAddDebtor({
       paid: false,
-      payment: debtor.payment,
+      expense: debtor.expense,
       name: debtor.name,
     });
 
     setDebtor({
-      payment: '',
-      paymentWithDots: '',
+      expense: '',
+      expenseWithDots: '',
       name: '',
     });
 
   };
 
-  const handlerChangeDebtorPayment = (event) => {
-    const payment = event.target.value.replaceAll('.', '');
-    if (!Number(payment)) {
+  const handlerChangeDebtorExpense = (event) => {
+    const expense = event.target.value.replaceAll('.', '');
+    if (!Number(expense)) {
       return;
     }
 
-    let paymentLength = payment.length;
-    let paymentLengthDismiss = payment.length;
-    let paymentWithDots = [];
+    let expenseLength = expense.length;
+    let expenseLengthDismiss = expense.length;
+    let expenseWithDots = [];
     for (
       let numberIterator = 1;
-      numberIterator < paymentLength;
+      numberIterator < expenseLength;
       numberIterator++
     ) {
       if (numberIterator % 3) {
@@ -44,18 +44,18 @@ function DebtorForm({handlerAddDebtor}) {
       }
 
       (
-        paymentWithDots
+        expenseWithDots
         .unshift(
-          payment.slice(paymentLength - numberIterator, paymentLengthDismiss)
+          expense.slice(expenseLength - numberIterator, expenseLengthDismiss)
         )
       );
-      paymentLengthDismiss = (paymentLength - numberIterator);
+      expenseLengthDismiss = (expenseLength - numberIterator);
     }
-    paymentWithDots.unshift(payment.slice(0, paymentLengthDismiss));
+    expenseWithDots.unshift(expense.slice(0, expenseLengthDismiss));
     setDebtor({
       ...debtor,
-      payment: payment,
-      paymentWithDots: paymentWithDots.join('.'),
+      expense: expense,
+      expenseWithDots: expenseWithDots.join('.'),
     });
   };
 
@@ -74,8 +74,8 @@ function DebtorForm({handlerAddDebtor}) {
             type="text"
             min="0"
             className="debtor_input"
-            value={debtor.paymentWithDots}
-            onChange={handlerChangeDebtorPayment}
+            value={debtor.expenseWithDots}
+            onChange={handlerChangeDebtorExpense}
           />*/}
           <input
             type="text"
@@ -85,7 +85,7 @@ function DebtorForm({handlerAddDebtor}) {
           />
           <button
             className="debtor_add"
-            disabled={!debtor.name /* || !debtor.payment*/}
+            disabled={!debtor.name /* || !debtor.expense*/}
           >
             Agregar
           </button>
