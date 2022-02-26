@@ -24,11 +24,20 @@ billsService = {
     const bills = await mysqlLib.get(
       (
         'SELECT ' +
-          'id, ' +
-          'description, ' +
-          'payment ' +
-        'FROM bill ' +
-        'WHERE user_id = ?'
+          'b.id, ' +
+          'b.description, ' +
+          'b.payment, ' +
+          'b.is_payment_equal isPaymentEqual, ' +
+          'd.name debtorName, ' +
+          'bd.id debtorInBillId, ' +
+          'bd.paid debtorPaid, ' +
+          'bd.expense debtorExpense ' +
+        'FROM bill b ' +
+          'JOIN bill_debtor bd ON bd.bill_id = b.id ' +
+          'JOIN debtor d ON d.id = bd.debtor_id ' +
+        'WHERE ' +
+          'bd.status = 1 AND ' +
+          'b.user_id = ?'
       ),
       [
         userId
@@ -36,7 +45,31 @@ billsService = {
     ).then(bills => bills)
     .catch(err => console.log(err));
 
-    return bills;
+    let billsReturn = [];
+    bills.forEach(bill => {
+      if (!billsReturn.find(billReturn => billReturn.id === bill.id)) {
+        billsReturn.push({
+          id: bill.id,
+          description: bill.description,
+          isPaymentEqual: (bill.isPaymentEqual === 1),
+          payment: bill.payment,
+          debtors: [],
+        });
+      }
+
+      const billsReturnIndex = (
+        billsReturn
+        .findIndex(billReturn => billReturn.id === bill.id)
+      );
+      billsReturn[billsReturnIndex].debtors.push({
+        id: bill.debtorInBillId,
+        name: bill.debtorName,
+        paid: bill.debtorPaid,
+        expense: bill.debtorExpense
+      });
+    });
+
+    return billsReturn;
   },
   create: async function({payment, description, isPaymentEqual}) {
     if (!description || !payment) {
