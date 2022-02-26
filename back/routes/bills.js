@@ -27,7 +27,7 @@ function billsRoute(app) {
     const debtorId = await debtorService.create(debtorDefault);
     const debtorInBillId = await (
       debtorService
-      .addInBill(debtorId, billId, billData.payment)
+      .addInBill(debtorId, billId, billData.payment, true)
     );
 
     (
