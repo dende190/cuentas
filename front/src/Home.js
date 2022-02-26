@@ -1,36 +1,65 @@
-import {Fragment, useState} from 'react';
+import {Fragment, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './components/Header';
-import DebtorForm from './components/DebtorForm';
-import DebtorList from './components/DebtorList';
+import Bill from './components/Bill';
 import './styles/form.css';
 import './styles/Home.css'
 
 function Home() {
-  const [debtorList, setDebtorList] = useState([{
-    id: 1,
-    paid: false,
-    name: 'yo',
-  }]);
-  const handlerAddDebtor = async (newDebtor) => {
-    const debtorIdResponse = await fetch(
-      `${process.env.REACT_APP_URL_API}cuenta/crear`,
+  const [billsList, setBillsList] = useState([]);
+  const [bill, setBill] = useState({
+    payment: '',
+    description: '',
+    isPaymentEqual: true,
+  });
+  useEffect(async () => {
+    const billsRequest = await fetch(
+      `${process.env.REACT_APP_URL_API}deuda/obtener`,
       {
         method: 'post',
-        body: JSON.stringify({newDebtor}),
+        body: JSON.stringify({userId: 1}),
         headers: {
           'Content-Type': 'application/json'
         },
       }
     );
 
-    const debtorId = await debtorIdResponse.json();
-    if (debtorList.find(debtor => debtor.id === debtorId)) {
-      return;
-    }
+    const billsJson = await billsRequest.json();
+    setBillsList(billsJson);
+  }, []);
 
-    newDebtor.id = debtorId;
-    setDebtorList([...debtorList, newDebtor]);
+  const handlerSubmitBill = async (event) => {
+    event.preventDefault();
+    const debtorIdResponse = await fetch(
+      `${process.env.REACT_APP_URL_API}deuda/crear`,
+      {
+        method: 'post',
+        body: JSON.stringify({bill}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    const billId = await debtorIdResponse.json();
+    bill.id = billId;
+    setBillsList([...billsList, bill]);
+  };
+
+  const handlerChangeBill = (event) => {
+    const dBillElement = event.target;
+    setBill({
+      ...bill,
+      [dBillElement.name]: dBillElement.value
+    });
+  };
+
+  const handlerChangeBillPaymentEqual = (event) => {
+    const dBillChecked = event.target;
+    setBill({
+      ...bill,
+      'isPaymentEqual': dBillChecked.checked,
+    });
   };
 
   return (
@@ -40,31 +69,41 @@ function Home() {
         <h2 className="title">
           Nuevo gasto
         </h2>
-        <form method="post">
-          <div className="container_expenses_data">
+        <form method="post" onSubmit={handlerSubmitBill}>
+          <div className="container_payment_data">
             <input
               type="number"
               min="0"
-              name="pagoTotal"
-              className="input expanses_data_price"
+              name="payment"
               placeholder="Cuanto gastaste?"
+              value={bill.payment}
+              onChange={handlerChangeBill}
             />
             <input
               type="text"
-              name="pagoDescripcion"
-              className="input"
+              name="description"
               placeholder="En que lo gastaste?"
+              value={bill.description}
+              onChange={handlerChangeBill}
             />
             <div>
               <label>
                 Gasto dividido por partes iguales:
-                <input type="checkbox" name="sameExpenses"/>
+                <input
+                  type="checkbox"
+                  defaultChecked={bill.isPaymentEqual}
+                  onChange={handlerChangeBillPaymentEqual}
+                />
               </label>
             </div>
           </div>
+          <button>Agregar</button>
         </form>
-        <DebtorForm handlerAddDebtor={handlerAddDebtor} />
-        <DebtorList list={debtorList} setList={setDebtorList} />
+        {
+          billsList.map(bill => (
+            <Bill key={bill.id} data={bill} />
+          ))
+        }
       </div>
     </Fragment>
   );
