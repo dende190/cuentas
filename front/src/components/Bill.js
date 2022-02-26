@@ -3,14 +3,10 @@ import DebtorForm from './DebtorForm';
 import DebtorList from './DebtorList';
 
 function Bill(props) {
-  const {id, description, payment} = props.data;
-  const [debtorList, setDebtorList] = useState([{
-    id: 1,
-    paid: false,
-    name: 'yo',
-  }]);
+  const {id, description, payment, debtors, isPaymentEqual} = props.data;
+  const [debtorList, setDebtorList] = useState(debtors);
   const handlerAddDebtor = async (debtor) => {
-    const debtorIdResponse = await fetch(
+    const debtorResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deudor/crear`,
       {
         method: 'post',
@@ -21,13 +17,24 @@ function Bill(props) {
       }
     );
 
-    const debtorId = await debtorIdResponse.json();
-    if (debtorList.find(debtor => debtor.id === debtorId)) {
+    const newDebtor = await debtorResponse.json();
+    if (debtorList.find(debtor => debtor.id === newDebtor.id)) {
       return;
     }
 
-    debtor.id = debtorId;
-    setDebtorList([...debtorList, debtor]);
+    if (!isPaymentEqual) {
+      setDebtorList([...debtorList, newDebtor]);
+      return;
+    }
+
+    debtorList.forEach((debtor, index) => {
+      debtorList[index] = {
+        ...debtor,
+        expense: newDebtor.expense,
+      };
+    });
+
+    setDebtorList([...debtorList, newDebtor]);
   };
 
   return (

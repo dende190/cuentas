@@ -10,6 +10,7 @@ function Debtor({data, handlerChangePaid}) {
           onChange={handlerChangePaid}
         />
         {data.name}
+        <span>({data.expense})</span>
       </label>
     </Fragment>
   );
