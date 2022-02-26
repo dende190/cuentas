@@ -1,6 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const billsService = require('../services/bills');
+const debtorService = require('../services/debtor');
+const debtorDefault = 'yo';
 
 function billsRoute(app) {
   const router = express.Router();
@@ -11,7 +13,7 @@ function billsRoute(app) {
     //   res.status(301).json({error: true});
     //   return;
     // }
-    const bills = await billsService.get(1);
+    const bills = await billsService.getAllForUser(1);
     res.status(200).json(bills);
   });
 
@@ -20,9 +22,30 @@ function billsRoute(app) {
     //   res.status(301).json({error: true});
     //   return;
     // }
-    const billId = await billsService.create(req.body.bill);
-    console.log(billId);
-    res.status(200).json(billId);
+    const billData = req.body.bill;
+    const billId = await billsService.create(billData);
+    const debtorId = await debtorService.create(debtorDefault);
+    const debtorInBillId = await (
+      debtorService
+      .addInBill(debtorId, billId, billData.payment)
+    );
+
+    (
+      res
+      .status(200)
+      .json({
+        id: billId,
+        description: billData.description,
+        payment: billData.payment,
+        isPaymentEqual: billData.isPaymentEqual,
+        debtors: [{
+          id: debtorInBillId,
+          name: debtorDefault,
+          paid: true,
+          expense: billData.payment,
+        }],
+      })
+    );
   });
 }
 
