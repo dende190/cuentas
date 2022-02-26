@@ -37,7 +37,7 @@ debtorService = {
 
     return debtorId;
   },
-  addInBill: async function(debtorId, billId, expense = 0) {
+  addInBill: async function(debtorId, billId, expense = 0, paid = false) {
     if (!debtorId || !billId) {
       return 0;
     }
@@ -66,6 +66,7 @@ debtorService = {
         bill_id: billId,
         debtor_id: debtorId,
         expense: expense,
+        paid: paid
       },
       'bill_debtor'
     ).then(debtorInBillId => debtorInBillId)
