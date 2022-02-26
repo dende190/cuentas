@@ -24,7 +24,7 @@ function debtorRoute(app) {
       expense = await billsService.updateExpenseEqual(req.body.billId);
     }
     res.status(200).json({
-      id: debtorId,
+      id: debtorInBillId,
       name: debtorData.name.toLowerCase(),
       paid: false,
       expense: expense,
