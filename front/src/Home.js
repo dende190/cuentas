@@ -30,7 +30,7 @@ function Home() {
 
   const handlerSubmitBill = async (event) => {
     event.preventDefault();
-    const debtorIdResponse = await fetch(
+    const billDataResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/crear`,
       {
         method: 'post',
@@ -41,9 +41,13 @@ function Home() {
       }
     );
 
-    const billId = await debtorIdResponse.json();
-    bill.id = billId;
-    setBillsList([...billsList, bill]);
+    const billDataJson = await billDataResponse.json();
+    setBillsList([...billsList, billDataJson]);
+    setBill({
+      payment: '',
+      description: '',
+      isPaymentEqual: true,
+    });
   };
 
   const handlerChangeBill = (event) => {
