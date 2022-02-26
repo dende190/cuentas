@@ -36,6 +36,41 @@ debtorService = {
     .catch(err => console.log(err));
 
     return debtorId;
+  },
+  addInBill: async function(debtorId, billId) {
+    if (!debtorId || !billId) {
+      return 0;
+    }
+
+    const debtorInBill = await mysqlLib.getRow(
+      (
+        'SELECT id ' +
+        'FROM bill_debtor ' +
+        'WHERE ' +
+          'debtor_id = ? AND ' +
+          'bill_id = ?'
+      ),
+      [
+        debtorId,
+        billId
+      ]
+    ).then(debtorInBill => debtorInBill)
+    .catch(err => console.log(err));
+
+    if (debtorInBill) {
+      return debtorInBill.id;
+    }
+
+    const debtorInBillId = await mysqlLib.insert(
+      {
+        bill_id: billId,
+        debtor_id: debtorId,
+      },
+      'bill_debtor'
+    ).then(debtorInBillId => debtorInBillId)
+    .catch(err => console.log(err));
+
+    return debtorInBillId;
   }
 };
 
