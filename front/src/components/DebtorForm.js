@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import addDotInNumberText from '../utils/addDotInNumberText';
 import '../styles/DebtorForm.css'
 
 function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
@@ -32,31 +33,10 @@ function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
       return;
     }
 
-    let expenseLength = expense.length;
-    let expenseLengthDismiss = expense.length;
-    let expenseWithDots = [];
-    for (
-      let numberIterator = 1;
-      numberIterator < expenseLength;
-      numberIterator++
-    ) {
-      if (numberIterator % 3) {
-        continue;
-      }
-
-      (
-        expenseWithDots
-        .unshift(
-          expense.slice(expenseLength - numberIterator, expenseLengthDismiss)
-        )
-      );
-      expenseLengthDismiss = (expenseLength - numberIterator);
-    }
-    expenseWithDots.unshift(expense.slice(0, expenseLengthDismiss));
     setDebtor({
       ...debtor,
       expense: expense,
-      expenseWithDots: expenseWithDots.join('.'),
+      expenseWithDots: addDotInNumberText(expense),
     });
   };
 
