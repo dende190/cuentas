@@ -53,6 +53,7 @@ billsService = {
           description: bill.description,
           isPaymentEqual: (bill.isPaymentEqual === 1),
           payment: bill.payment,
+          paidOut: 0,
           debtors: [],
         });
       }
@@ -61,6 +62,10 @@ billsService = {
         billsReturn
         .findIndex(billReturn => billReturn.id === bill.id)
       );
+      if (bill.debtorPaid === 1) {
+        billsReturn[billsReturnIndex].paidOut += bill.debtorExpense;
+      }
+
       billsReturn[billsReturnIndex].debtors.push({
         id: bill.debtorInBillId,
         name: bill.debtorName,
@@ -120,6 +125,25 @@ billsService = {
 
     return expensePerDebtor;
   },
+  getPaidOut: async function(billId) {
+    const dataForPayment = await mysqlLib.getRow(
+      (
+        'SELECT ' +
+          'SUM(expense) paidOut ' +
+        'FROM bill_debtor ' +
+        'WHERE ' +
+          'status = 1 AND ' +
+          'paid = 1 AND ' +
+          'bill_id = ?'
+      ),
+      [
+        billId
+      ]
+    ).then(dataForPayment => dataForPayment)
+    .catch(err => console.log(err));
+
+    return dataForPayment.paidOut;
+  }
 };
 
 module.exports = billsService;

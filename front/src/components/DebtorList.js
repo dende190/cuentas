@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import Debtor from './Debtor';
 
-function DebtorList({list, setList}) {
+function DebtorList({billId, list, setList, setBillPaidOut}) {
   const handlerChangePaid = async (event) => {
     const dDebtorCheck = event.target;
-    await fetch(
+    const paidOutResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deudor/cambiar_estado_de_pago`,
       {
         method: 'post',
@@ -12,7 +12,8 @@ function DebtorList({list, setList}) {
           JSON
           .stringify({
             debtorInBillId: dDebtorCheck.dataset.id,
-            paid: dDebtorCheck.checked
+            paid: dDebtorCheck.checked,
+            billId: billId,
           })
         ),
         headers: {
@@ -21,7 +22,7 @@ function DebtorList({list, setList}) {
       }
     );
     const paidOut = await paidOutResponse.json();
-    setPaidOutTest(paidOut);
+    setBillPaidOut(paidOut);
   };
 
   const handlerClickDebtorDelete = async (event) => {

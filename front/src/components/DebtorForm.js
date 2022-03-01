@@ -15,6 +15,7 @@ function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
       paid: false,
       expense: debtor.expense,
       name: debtor.name,
+      paidOut: debtor.paidOut,
     });
 
     setDebtor({

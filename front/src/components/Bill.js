@@ -3,8 +3,16 @@ import DebtorForm from './DebtorForm';
 import DebtorList from './DebtorList';
 
 function Bill(props) {
-  const {id, description, payment, debtors, isPaymentEqual} = props.data;
+  const {
+    id,
+    description,
+    payment,
+    debtors,
+    isPaymentEqual,
+    paidOut,
+  } = props.data;
   const [debtorList, setDebtorList] = useState(debtors);
+  const [billPaidOut, setBillPaidOut] = useState(paidOut);
   const handlerAddDebtor = async (debtor) => {
     const debtorResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deudor/crear`,
@@ -42,6 +50,7 @@ function Bill(props) {
       <div>
         <h3>{description}</h3>
         <p>Total deuda: {payment}</p>
+        <p>Total pagado: {billPaidOut}</p>
       </div>
       <DebtorForm
         handlerAddDebtor={handlerAddDebtor}
@@ -51,7 +60,7 @@ function Bill(props) {
         billId={id}
         list={debtorList}
         setList={setDebtorList}
-        setPaidOutTest={setPaidOutTest}
+        setBillPaidOut={setBillPaidOut}
       />
     </Fragment>
   );
