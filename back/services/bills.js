@@ -4,7 +4,7 @@ billsService = {
   isPaymentEqual: async function(billId) {
     const billData = await mysqlLib.getRow(
       (
-        'SELECT is_payment_equal ' +
+        'SELECT is_payment_equal isPaymentEqual ' +
         'FROM bill ' +
         'WHERE id = ?'
       ),
@@ -17,7 +17,6 @@ billsService = {
     if (!billData) {
       return;
     }
-
     return (billData.isPaymentEqual === 1);
   },
   getAllForUser: async function(userId) {
