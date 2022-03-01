@@ -43,8 +43,16 @@ function Bill(props) {
         <h3>{description}</h3>
         <p>Total deuda: {payment}</p>
       </div>
-      <DebtorForm handlerAddDebtor={handlerAddDebtor} />
-      <DebtorList list={debtorList} setList={setDebtorList} />
+      <DebtorForm
+        handlerAddDebtor={handlerAddDebtor}
+        isPaymentEqual={isPaymentEqual}
+      />
+      <DebtorList
+        billId={id}
+        list={debtorList}
+        setList={setDebtorList}
+        setPaidOutTest={setPaidOutTest}
+      />
     </Fragment>
   );
 }

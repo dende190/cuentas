@@ -24,6 +24,21 @@ function billsRoute(app) {
     // }
     const billData = req.body.bill;
     const billId = await billsService.create(billData);
+    if (!billData.isPaymentEqual) {
+      (
+        res
+        .status(200)
+        .json({
+          id: billId,
+          description: billData.description,
+          payment: billData.payment,
+          isPaymentEqual: billData.isPaymentEqual,
+          debtors: [],
+        })
+      );
+      return;
+    }
+
     const debtorId = await debtorService.create(debtorDefault);
     const debtorInBillId = await (
       debtorService

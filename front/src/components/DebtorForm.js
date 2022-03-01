@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import '../styles/DebtorForm.css'
 
-function DebtorForm({handlerAddDebtor}) {
+function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
   const [debtor, setDebtor] = useState({
     expense: '',
     expenseWithDots: '',
@@ -70,17 +70,22 @@ function DebtorForm({handlerAddDebtor}) {
     <form onSubmit={handlerSubmit}>
       <div className="debtor">
         <div className="debtor_container">
-          {/*<input
-            type="text"
-            min="0"
-            className="debtor_input"
-            value={debtor.expenseWithDots}
-            onChange={handlerChangeDebtorExpense}
-          />*/}
+          {
+            isPaymentEqual ||
+            <input
+              type="text"
+              min="0"
+              className="debtor_input"
+              value={debtor.expenseWithDots}
+              placeholder="Cuanto debe"
+              onChange={handlerChangeDebtorExpense}
+            />
+          }
           <input
             type="text"
             className="debtor_input"
             value={debtor.name}
+            placeholder="Nombre deudor"
             onChange={handlerChangeDebtorName}
           />
           <button

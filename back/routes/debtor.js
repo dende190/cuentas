@@ -13,16 +13,18 @@ function debtorRoute(app) {
     //   return;
     // }
     const debtorData = req.body.debtor;
-    const isPaymentEqual = billsService.isPaymentEqual(req.body.billId);
+    const billId = req.body.billId;
+    const isPaymentEqual = await billsService.isPaymentEqual(billId);
     const debtorId = await debtorService.create(debtorData.name);
     const debtorInBillId = await (
       debtorService
-      .addInBill(debtorId, req.body.billId, (debtorData.expense || 0))
+      .addInBill(debtorId, billId, (debtorData.expense || 0))
     );
-    let expense = [];
+    let expense = debtorData.expense;
     if (isPaymentEqual) {
-      expense = await billsService.updateExpenseEqual(req.body.billId);
+      expense = await billsService.updateExpenseEqual(billId);
     }
+
     res.status(200).json({
       id: debtorInBillId,
       name: debtorData.name.toLowerCase(),
