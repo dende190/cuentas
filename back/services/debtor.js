@@ -87,6 +87,33 @@ debtorService = {
       'bill_debtor'
     );
   },
+  delete: async function(debtorInBillId) {
+    if (!debtorInBillId) {
+      return;
+    }
+
+    const billData = await mysqlLib.getRow(
+      (
+        'SELECT bill_id billId ' +
+        'FROM bill_debtor ' +
+        'WHERE id = ?'
+      ),
+      [
+        debtorInBillId
+      ]
+    ).then(billData => billData)
+    .catch(err => console.log(err));
+
+    await mysqlLib.update(
+      'status = ?',
+      '-1',
+      'id = ?',
+      debtorInBillId,
+      'bill_debtor'
+    );
+
+    return billData.billId;
+  }
 };
 
 module.exports = debtorService;

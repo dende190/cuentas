@@ -40,7 +40,18 @@ function debtorRoute(app) {
     // }
     const debtorData = req.body;
     await debtorService.changePay(debtorData.debtorInBillId, debtorData.paid);
-    res.status(200).json({});
+    const paidOut = await billsService.getPaidOut(req.body.billId);
+    res.status(200).json(paidOut);
+  });
+
+  router.post('/eliminar', async (req, res, next) => {
+    // if (!req.body.token) {
+    //   res.status(301).json({error: true});
+    //   return;
+    // }
+    const billId = await debtorService.delete(req.body.debtorInBillId);
+    expense = await billsService.updateExpenseEqual(billId);
+    res.status(200).json({expense: expense});
   });
 }
 

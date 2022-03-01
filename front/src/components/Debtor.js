@@ -1,6 +1,6 @@
 import {Fragment, useState} from 'react';
 
-function Debtor({data, handlerChangePaid}) {
+function Debtor({data, handlerChangePaid, handlerClickDebtorDelete}) {
   return (
     <Fragment>
       <label>
@@ -12,6 +12,9 @@ function Debtor({data, handlerChangePaid}) {
         />
         {data.name}
         <span>({data.expense})</span>
+        <button data-id={data.id} onClick={handlerClickDebtorDelete}>
+          Borrar
+        </button>
       </label>
     </Fragment>
   );

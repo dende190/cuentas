@@ -20,6 +20,36 @@ function DebtorList({list, setList}) {
         },
       }
     );
+    const paidOut = await paidOutResponse.json();
+    setPaidOutTest(paidOut);
+  };
+
+  const handlerClickDebtorDelete = async (event) => {
+    const dDebtor = event.target;
+    const newExpenseResponse = await fetch(
+      `${process.env.REACT_APP_URL_API}deudor/eliminar`,
+      {
+        method: 'post',
+        body: (
+          JSON
+          .stringify({debtorInBillId: dDebtor.dataset.id})
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    const newExpenseJson = await newExpenseResponse.json();
+    dDebtor.parentElement.remove();
+    list.forEach((debtor, index) => {
+      list[index] = {
+        ...debtor,
+        expense: newExpenseJson.expense,
+      };
+    });
+
+    setList([...list]);
   };
 
   return (
@@ -30,6 +60,7 @@ function DebtorList({list, setList}) {
             key={debtor.id}
             data={debtor}
             handlerChangePaid={handlerChangePaid}
+            handlerClickDebtorDelete={handlerClickDebtorDelete}
           />
         ))
       }
