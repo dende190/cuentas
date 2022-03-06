@@ -112,7 +112,7 @@ function Home() {
               value={bill.description}
               onChange={handlerChangeBillDescription}
             />
-            <div>
+            <div className="bill_checkbox_container">
               <label>
                 Gasto dividido por partes iguales:
                 <input

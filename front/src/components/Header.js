@@ -12,9 +12,6 @@ function Header() {
       <Link to="/" className="links">
         Inicio
       </Link>
-      <Link to="/crear_nota" className="links">
-        Crear Nueva Nota
-      </Link>
       <p className="links" onClick={handlerLogOut}>
         Cerrar Sesion
       </p>
