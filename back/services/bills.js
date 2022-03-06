@@ -64,6 +64,10 @@ billsService = {
         billsReturn[billsReturnIndex].paidOut += bill.debtorExpense;
       }
 
+      if (!bill.debtorInBillId) {
+        return;
+      }
+
       billsReturn[billsReturnIndex].debtors.push({
         id: bill.debtorInBillId,
         name: bill.debtorName,
