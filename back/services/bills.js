@@ -116,6 +116,10 @@ billsService = {
     .catch(err => console.log(err));
 
     const {payment, debtorCount} = dataForPayment;
+    if (!debtorCount) {
+      return payment;
+    }
+
     const expensePerDebtor = Math.round(payment / debtorCount);
     await mysqlLib.update(
       'expense = ?',
