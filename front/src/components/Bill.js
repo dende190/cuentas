@@ -1,6 +1,7 @@
 import {Fragment, useState} from 'react';
 import DebtorForm from './DebtorForm';
 import DebtorList from './DebtorList';
+import '../styles/Bill.css'
 
 function Bill(props) {
   const {
@@ -47,10 +48,16 @@ function Bill(props) {
 
   return (
     <Fragment>
-      <div>
-        <h3>{description}</h3>
-        <p>Total deuda: {payment}</p>
-        <p>Total pagado: {billPaidOut}</p>
+      <div className="container_bill">
+        <h1 className="bill_title">
+          {description}
+        </h1>
+        <div className="container_bill-payments">
+          <p className="bill_payment">
+            Total deuda: {payment}
+          </p>
+          <p>Total pagado: {billPaidOut}</p>
+        </div>
       </div>
       <DebtorForm
         handlerAddDebtor={handlerAddDebtor}

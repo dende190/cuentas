@@ -1,0 +1,18 @@
+.container_bill {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bill_title {
+  margin: 0;
+}
+
+.container_bill-payments {
+  display: flex;
+}
+
+.bill_payment {
+  margin-right: 16px;
+}

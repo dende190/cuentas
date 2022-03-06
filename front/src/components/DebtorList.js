@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import Debtor from './Debtor';
+import '../styles/DebtorList.css';
 
 function DebtorList({billId, list, setList, setBillPaidOut}) {
   const handlerChangePaid = async (event) => {
@@ -28,16 +29,14 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
 
   const handlerClickDebtorDelete = async (event) => {
     const dDebtor = event.target;
+    const debtorInBillId = dDebtor.dataset.id;
     const newExpenseResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deudor/eliminar`,
       {
         method: 'post',
         body: (
           JSON
-          .stringify({
-            token: localStorage.token,
-            debtorInBillId: dDebtor.dataset.id
-          })
+          .stringify({token: localStorage.token, debtorInBillId})
         ),
         headers: {
           'Content-Type': 'application/json'
@@ -46,7 +45,7 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
     );
 
     const newExpenseJson = await newExpenseResponse.json();
-    dDebtor.parentElement.remove();
+    document.querySelector('.jsDebtor' + debtorInBillId).remove();
     list.forEach((debtor, index) => {
       list[index] = {
         ...debtor,
@@ -58,7 +57,7 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
   };
 
   return (
-    <div className="debtor_list">
+    <div className="container_debtor_list">
       {
         list.map(debtor => (
           <Debtor

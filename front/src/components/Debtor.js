@@ -1,22 +1,31 @@
-import {Fragment, useState} from 'react';
+import {useState} from 'react';
+import '../styles/Debtor.css';
+import Trash from '../img/trash.png';
 
 function Debtor({data, handlerChangePaid, handlerClickDebtorDelete}) {
   return (
-    <Fragment>
+    <div className={`container_debtor_info jsDebtor${data.id}`}>
       <label>
         <input
+          className="debtor_checkbox"
           data-id={data.id}
           type="checkbox"
           defaultChecked={data.paid}
           onChange={handlerChangePaid}
         />
         {data.name}
-        <span>({data.expense})</span>
-        <button data-id={data.id} onClick={handlerClickDebtorDelete}>
-          Borrar
-        </button>
+        <span className="debtor_expanse">
+          ({data.expense})
+        </span>
       </label>
-    </Fragment>
+      <button
+        className="debtor_trash"
+        data-id={data.id}
+        onClick={handlerClickDebtorDelete}
+      >
+        <img src={Trash} data-id={data.id} onClick={handlerClickDebtorDelete}/>
+      </button>
+    </div>
   );
 }
 

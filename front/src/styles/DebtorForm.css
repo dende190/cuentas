@@ -8,14 +8,29 @@
 .debtor_container {
   padding: 8px;
   background-color: #ededed;
+  border-radius: 10px;
 }
 
 .debtor_input {
+  background: none;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
   margin-right: 15px;
+}
+
+.debtor_input:focus {
+  outline: none;
 }
 
 .debtor_add {
   background-color: #ea5676;
   border: none;
+  background-color: #ea5676;
+  border: none;
   padding: 4px;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 9px;
 }
