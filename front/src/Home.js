@@ -90,12 +90,14 @@ function Home() {
     <Fragment>
       <Header />
       <div>
-        <h2 className="title">
-          Nuevo gasto
-        </h2>
-        <form method="post" onSubmit={handlerSubmitBill}>
+        <form
+          method="post"
+          className="container_payment_form"
+          onSubmit={handlerSubmitBill}
+        >
           <div className="container_payment_data">
             <input
+              className="bill_input"
               type="text"
               name="payment"
               placeholder="Cuanto gastaste?"
@@ -103,6 +105,7 @@ function Home() {
               onChange={handlerChangeBillPayment}
             />
             <input
+              className="bill_input"
               type="text"
               name="description"
               placeholder="En que lo gastaste?"
@@ -113,6 +116,7 @@ function Home() {
               <label>
                 Gasto dividido por partes iguales:
                 <input
+                  className="bill_checkbox"
                   type="checkbox"
                   defaultChecked={bill.isPaymentEqual}
                   onChange={handlerChangeBillPaymentEqual}
@@ -120,7 +124,9 @@ function Home() {
               </label>
             </div>
           </div>
-          <button>Agregar</button>
+          <button className="bill_button">
+            Agregar
+          </button>
         </form>
         {
           billsList.length ?

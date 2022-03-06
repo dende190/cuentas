@@ -12,7 +12,7 @@
 }
 
 .debtor_input {
-  background: none;
+  background: #f3f2f2;
   border: none;
   padding: 12px;
   font-size: 16px;
@@ -24,8 +24,6 @@
 }
 
 .debtor_add {
-  background-color: #ea5676;
-  border: none;
   background-color: #ea5676;
   border: none;
   padding: 4px;
