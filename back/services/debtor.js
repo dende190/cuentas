@@ -44,7 +44,9 @@ debtorService = {
 
     const debtorInBill = await mysqlLib.getRow(
       (
-        'SELECT id ' +
+        'SELECT ' +
+          'id, ' +
+          'status ' +
         'FROM bill_debtor ' +
         'WHERE ' +
           'debtor_id = ? AND ' +
@@ -57,7 +59,16 @@ debtorService = {
     ).then(debtorInBill => debtorInBill)
     .catch(err => console.log(err));
 
-    if (debtorInBill) {
+    if (debtorInBill.id && debtorInBill.status === 1) {
+      return debtorInBill.id;
+    } else if (debtorInBill.id && debtorInBill.status !== 1) {
+      await mysqlLib.update(
+        'status = ?',
+        1,
+        'id = ?',
+        debtorInBill.id,
+        'bill_debtor'
+      );
       return debtorInBill.id;
     }
 

@@ -32,10 +32,9 @@ billsService = {
           'bd.paid debtorPaid, ' +
           'bd.expense debtorExpense ' +
         'FROM bill b ' +
-          'JOIN bill_debtor bd ON bd.bill_id = b.id ' +
-          'JOIN debtor d ON d.id = bd.debtor_id ' +
+          'LEFT JOIN bill_debtor bd ON bd.bill_id = b.id AND bd.status = 1 ' +
+          'LEFT JOIN debtor d ON d.id = bd.debtor_id ' +
         'WHERE ' +
-          'bd.status = 1 AND ' +
           'b.user_id = ?'
       ),
       [
