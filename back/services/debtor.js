@@ -59,9 +59,9 @@ debtorService = {
     ).then(debtorInBill => debtorInBill)
     .catch(err => console.log(err));
 
-    if (debtorInBill.id && debtorInBill.status === 1) {
+    if (debtorInBill && debtorInBill.status === 1) {
       return debtorInBill.id;
-    } else if (debtorInBill.id && debtorInBill.status !== 1) {
+    } else if (debtorInBill && debtorInBill.status !== 1) {
       await mysqlLib.update(
         'status = ?',
         1,

@@ -51,6 +51,7 @@ function debtorRoute(app) {
       res.status(301).json({error: true});
       return;
     }
+
     const billId = await debtorService.delete(req.body.debtorInBillId);
     expense = await billsService.updateExpenseEqual(billId);
     res.status(200).json({expense: expense});
