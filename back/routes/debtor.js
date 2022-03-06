@@ -8,10 +8,11 @@ function debtorRoute(app) {
   app.use('/deudor', router);
 
   router.post('/crear', async (req, res, next) => {
-    // if (!req.body.token) {
-    //   res.status(301).json({error: true});
-    //   return;
-    // }
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
+
     const debtorData = req.body.debtor;
     const billId = req.body.billId;
     const isPaymentEqual = await billsService.isPaymentEqual(billId);
@@ -34,10 +35,11 @@ function debtorRoute(app) {
   });
 
   router.post('/cambiar_estado_de_pago', async (req, res, next) => {
-    // if (!req.body.token) {
-    //   res.status(301).json({error: true});
-    //   return;
-    // }
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
+
     const debtorData = req.body;
     await debtorService.changePay(debtorData.debtorInBillId, debtorData.paid);
     const paidOut = await billsService.getPaidOut(req.body.billId);
@@ -45,10 +47,10 @@ function debtorRoute(app) {
   });
 
   router.post('/eliminar', async (req, res, next) => {
-    // if (!req.body.token) {
-    //   res.status(301).json({error: true});
-    //   return;
-    // }
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
     const billId = await debtorService.delete(req.body.debtorInBillId);
     expense = await billsService.updateExpenseEqual(billId);
     res.status(200).json({expense: expense});

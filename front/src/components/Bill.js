@@ -18,7 +18,7 @@ function Bill(props) {
       `${process.env.REACT_APP_URL_API}deudor/crear`,
       {
         method: 'post',
-        body: JSON.stringify({billId: id, debtor}),
+        body: JSON.stringify({token: localStorage.token, billId: id, debtor}),
         headers: {
           'Content-Type': 'application/json'
         },

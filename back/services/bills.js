@@ -75,14 +75,14 @@ billsService = {
 
     return billsReturn;
   },
-  create: async function({payment, description, isPaymentEqual}) {
-    if (!description || !payment) {
+  create: async function(userId, payment, description, isPaymentEqual) {
+    if (!userId || !description || !payment) {
       return 0;
     }
 
     const billId = await mysqlLib.insert(
       {
-        user_id: 1,
+        user_id: userId,
         description,
         payment,
         payment_type_id: 1,

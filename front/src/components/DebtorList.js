@@ -11,6 +11,7 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
         body: (
           JSON
           .stringify({
+            token: localStorage.token,
             debtorInBillId: dDebtorCheck.dataset.id,
             paid: dDebtorCheck.checked,
             billId: billId,
@@ -33,7 +34,10 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
         method: 'post',
         body: (
           JSON
-          .stringify({debtorInBillId: dDebtor.dataset.id})
+          .stringify({
+            token: localStorage.token,
+            debtorInBillId: dDebtor.dataset.id
+          })
         ),
         headers: {
           'Content-Type': 'application/json'

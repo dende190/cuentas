@@ -7,6 +7,10 @@ import './styles/form.css';
 import './styles/Home.css'
 
 function Home() {
+  if (!localStorage.token) {
+    window.location.href = '/iniciar_sesion';
+  }
+
   const [billsList, setBillsList] = useState([]);
   const [bill, setBill] = useState({
     payment: '',
@@ -19,7 +23,7 @@ function Home() {
       `${process.env.REACT_APP_URL_API}deuda/obtener`,
       {
         method: 'post',
-        body: JSON.stringify({userId: 1}),
+        body: JSON.stringify({token: localStorage.token, userId: 1}),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -36,7 +40,7 @@ function Home() {
       `${process.env.REACT_APP_URL_API}deuda/crear`,
       {
         method: 'post',
-        body: JSON.stringify({bill}),
+        body: JSON.stringify({token: localStorage.token, bill}),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -119,9 +123,13 @@ function Home() {
           <button>Agregar</button>
         </form>
         {
-          billsList.map(bill => (
-            <Bill key={bill.id} data={bill}/>
-          ))
+          billsList.length ?
+          (
+            billsList.map(bill => (
+              <Bill key={bill.id} data={bill}/>
+            ))
+          ) :
+          (<h3>No hay deudas todavia</h3>)
         }
       </div>
     </Fragment>

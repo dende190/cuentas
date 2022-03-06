@@ -9,21 +9,30 @@ function billsRoute(app) {
   app.use('/deuda', router);
 
   router.post('/obtener', async (req, res, next) => {
-    // if (!req.body.token) {
-    //   res.status(301).json({error: true});
-    //   return;
-    // }
-    const bills = await billsService.getAllForUser(1);
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
+
+    const userData = jwt.decode(req.body.token);
+    const bills = await billsService.getAllForUser(userData.id);
     res.status(200).json(bills);
   });
 
   router.post('/crear', async (req, res, next) => {
-    // if (!req.body.token) {
-    //   res.status(301).json({error: true});
-    //   return;
-    // }
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
+
     const billData = req.body.bill;
-    const billId = await billsService.create(billData);
+    const userData = jwt.decode(req.body.token);
+    const billId = await billsService.create(
+      userData.id,
+      billData.payment,
+      billData.description,
+      billData.isPaymentEqual
+    );
     if (!billData.isPaymentEqual) {
       (
         res
