@@ -48,7 +48,7 @@ function Home() {
     );
 
     const billDataJson = await billDataResponse.json();
-    setBillsList([...billsList, billDataJson]);
+    setBillsList([billDataJson, ...billsList]);
     setBill({
       payment: '',
       description: '',
