@@ -30,7 +30,7 @@ CREATE TABLE bill (
   `modified_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (payment_type_id) REFERENCES payment_type(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 CREATE TABLE bill_debtor (
