@@ -2,16 +2,15 @@ const mysqlLib = require('../lib/mysql');
 
 debtorService = {
   get: async function(name) {
-    const debtor = await mysqlLib.getRow(
-      (
-        'SELECT id ' +
-        'FROM debtor ' +
-        'WHERE name = ?'
-      ),
+    const debtor = await mysqlLib.selectRow(
+      ['id'],
+      ['debtor'],
       [
-        name
-      ]
-    ).then(debtor => debtor)
+        ['name', '?'],
+      ],
+      [name]
+    )
+    .then(debtor => debtor)
     .catch(err => console.log(err));
 
     return (debtor ? debtor.id : 0);
@@ -42,21 +41,23 @@ debtorService = {
       return 0;
     }
 
-    const debtorInBill = await mysqlLib.getRow(
-      (
-        'SELECT ' +
-          'id, ' +
-          'status ' +
-        'FROM bill_debtor ' +
-        'WHERE ' +
-          'debtor_id = ? AND ' +
-          'bill_id = ?'
-      ),
+    const debtorInBill = await mysqlLib.selectRow(
+      [
+        'id',
+        'status',
+      ],
+      ['bill_debtor'],
+      [
+        ['debtor_id', '?'],
+        'AND',
+        ['bill_id', '?'],
+      ],
       [
         debtorId,
-        billId
+        billId,
       ]
-    ).then(debtorInBill => debtorInBill)
+    )
+    .then(debtorInBill => debtorInBill)
     .catch(err => console.log(err));
 
     if (debtorInBill && debtorInBill.status === 1) {
@@ -103,16 +104,15 @@ debtorService = {
       return;
     }
 
-    const billData = await mysqlLib.getRow(
-      (
-        'SELECT bill_id billId ' +
-        'FROM bill_debtor ' +
-        'WHERE id = ?'
-      ),
+    const billData = await mysqlLib.selectRow(
+      ['bill_id billId'],
+      ['bill_debtor'],
       [
-        debtorInBillId
-      ]
-    ).then(billData => billData)
+        ['id', '?'],
+      ],
+      [debtorInBillId]
+    )
+    .then(billData => billData)
     .catch(err => console.log(err));
 
     await mysqlLib.update(

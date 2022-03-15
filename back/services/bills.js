@@ -2,16 +2,15 @@ const mysqlLib = require('../lib/mysql');
 
 billsService = {
   isPaymentEqual: async function(billId) {
-    const billData = await mysqlLib.getRow(
-      (
-        'SELECT is_payment_equal isPaymentEqual ' +
-        'FROM bill ' +
-        'WHERE id = ?'
-      ),
+    const billData = await mysqlLib.selectRow(
+      ['is_payment_equal isPaymentEqual'],
+      ['bill'],
       [
-        billId
-      ]
-    ).then(billData => billData)
+        ['id', '?'],
+      ],
+      [billId]
+    )
+    .then(billData => billData)
     .catch(err => console.log(err));
 
     if (!billData) {
@@ -20,27 +19,31 @@ billsService = {
     return (billData.isPaymentEqual === 1);
   },
   getAllForUser: async function(userId) {
-    const bills = await mysqlLib.get(
-      (
-        'SELECT ' +
-          'b.id, ' +
-          'b.description, ' +
-          'b.payment, ' +
-          'b.is_payment_equal isPaymentEqual, ' +
-          'd.name debtorName, ' +
-          'bd.id debtorInBillId, ' +
-          'bd.paid debtorPaid, ' +
-          'bd.expense debtorExpense ' +
-        'FROM bill b ' +
-          'LEFT JOIN bill_debtor bd ON bd.bill_id = b.id AND bd.status = 1 ' +
-          'LEFT JOIN debtor d ON d.id = bd.debtor_id ' +
-        'WHERE ' +
-          'b.user_id = ?'
-      ),
+    const bills = await mysqlLib.select(
       [
-        userId
+        'b.id',
+        'b.description',
+        'b.payment',
+        'b.is_payment_equal isPaymentEqual',
+        'd.name debtorName',
+        'bd.id debtorInBillId',
+        'bd.paid debtorPaid',
+        'bd.expense debtorExpense',
+      ],
+      [
+        'bill b',
+        'LEFT JOIN bill_debtor bd ON bd.bill_id = b.id AND bd.status = 1',
+        'LEFT JOIN debtor d ON d.id = bd.debtor_id',
+      ],
+      [
+        ['b.user_id', '?'],
+      ],
+      [userId],
+      [
+        'ORDER BY b.id DESC',
       ]
-    ).then(bills => bills)
+    )
+    .then(bills => bills)
     .catch(err => console.log(err));
 
     let billsReturn = [];
@@ -98,21 +101,23 @@ billsService = {
     return (billId || 0);
   },
   updateExpenseEqual: async function(billId) {
-    const dataForPayment = await mysqlLib.getRow(
-      (
-        'SELECT ' +
-          'b.payment, ' +
-          'COUNT(debtor_id) debtorCount ' +
-        'FROM bill b ' +
-          'JOIN bill_debtor bd ON bd.bill_id = b.id ' +
-        'WHERE ' +
-          'bd.status = 1 AND ' +
-          'bd.bill_id = ?'
-      ),
+    const dataForPayment = await mysqlLib.selectRow(
       [
-        billId
-      ]
-    ).then(dataForPayment => dataForPayment)
+        'b.payment',
+        'COUNT(debtor_id) debtorCount',
+      ],
+      [
+        'bill b',
+        'JOIN bill_debtor bd ON bd.bill_id = b.id',
+      ],
+      [
+        ['bd.status', 1],
+        'AND',
+        ['bd.bill_id', '?'],
+      ],
+      [billId]
+    )
+    .then(dataForPayment => dataForPayment)
     .catch(err => console.log(err));
 
     const {payment, debtorCount} = dataForPayment;
@@ -132,20 +137,19 @@ billsService = {
     return expensePerDebtor;
   },
   getPaidOut: async function(billId) {
-    const dataForPayment = await mysqlLib.getRow(
-      (
-        'SELECT ' +
-          'SUM(expense) paidOut ' +
-        'FROM bill_debtor ' +
-        'WHERE ' +
-          'status = 1 AND ' +
-          'paid = 1 AND ' +
-          'bill_id = ?'
-      ),
+    const dataForPayment = await mysqlLib.selectRow(
+      ['SUM(expense) paidOut'],
+      ['bill_debtor'],
       [
-        billId
-      ]
-    ).then(dataForPayment => dataForPayment)
+        ['status', 1],
+        'AND',
+        ['paid', 1],
+        'AND',
+        ['bill_id', '?'],
+      ],
+      [billId]
+    )
+    .then(dataForPayment => dataForPayment)
     .catch(err => console.log(err));
 
     return dataForPayment.paidOut;
