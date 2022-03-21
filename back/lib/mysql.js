@@ -5,7 +5,7 @@ const PASSWROD = encodeURIComponent(config.dbPassword);
 const HOST = encodeURIComponent(config.dbHost);
 const NAME = encodeURIComponent(config.dbName);
 
-mysqlLib = {
+const mysqlLib = {
   connection: [],
   connect: function() {
     if (this.connection && this.connection.connectionId) {

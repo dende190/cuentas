@@ -2,7 +2,7 @@ const mysqlLib = require('../lib/mysql');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-loginService = {
+const loginService = {
   authUser: async function({email, password}) {
     if (!email || !password) {
       return {};

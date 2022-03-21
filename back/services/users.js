@@ -1,6 +1,6 @@
 const mysqlLib = require('../lib/mysql');
 
-usersService = {
+const usersService = {
   getAll: async function() {
     const date = new Date();
     const today = (

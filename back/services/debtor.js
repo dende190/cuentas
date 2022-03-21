@@ -1,6 +1,6 @@
 const mysqlLib = require('../lib/mysql');
 
-debtorService = {
+const debtorService = {
   get: async function(name) {
     const debtor = await mysqlLib.selectRow(
       ['id'],
