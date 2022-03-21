@@ -54,6 +54,7 @@ const analyticsService = {
           description: bill.description,
           payment: bill.payment,
           paidOut: 0,
+          paid: true,
           debtors: [],
         });
       }
@@ -65,6 +66,13 @@ const analyticsService = {
 
       if (bill.debtorPaid === 1) {
         billsReport[createdOn][billsReportIndex].paidOut += bill.debtorExpense;
+      }
+
+      if (
+        billsReport[createdOn][billsReportIndex].paid &&
+        bill.debtorPaid !== 1
+      ) {
+        billsReport[createdOn][billsReportIndex].paid = false;
       }
 
       billsReport[createdOn][billsReportIndex].debtors.push({

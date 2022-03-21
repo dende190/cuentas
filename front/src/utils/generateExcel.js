@@ -29,6 +29,9 @@ function generateExcel(json) {
           '<td>' +
             '<h4>' + bill.paidOut + '</h4>' +
           '</td>' +
+          '<td>' +
+            '<h4>' + (bill.paid ? 'PAGADO' : 'FALTA') + '</h4>' +
+          '</td>' +
         '</tr>'
       );
       bill.debtors.forEach(debtor => {
