@@ -16,6 +16,7 @@ function Home() {
     payment: '',
     paymentWithDot: '',
     description: '',
+    date: '',
     isPaymentEqual: true,
   });
   useEffect(async () => {
@@ -48,17 +49,43 @@ function Home() {
     );
 
     const billDataJson = await billDataResponse.json();
-    setBillsList([billDataJson, ...billsList]);
+    const billSort = (
+      [billDataJson, ...billsList]
+      .sort((after, before) => {
+        let afterCreatedOn = after.createdOn;
+        let beforeCreatedOn = before.createdOn;
+
+        if (afterCreatedOn > beforeCreatedOn) {
+          return -1;
+        } else if (afterCreatedOn < beforeCreatedOn) {
+          return 1
+        }
+
+        return 0;
+      })
+    );
+
+    setBillsList(billSort);
     setBill({
       payment: '',
       description: '',
       paymentWithDot: '',
+      date: '',
       isPaymentEqual: true,
     });
   };
 
   const handlerChangeBillPayment = (event) => {
     const payment = event.target.value.replaceAll('.', '');
+    if (!payment.length) {
+      setBill({
+        ...bill,
+        payment: '',
+        paymentWithDot: '',
+      });
+      return;
+    }
+
     if (!Number(payment)) {
       return;
     }
@@ -71,18 +98,23 @@ function Home() {
   };
 
   const handlerChangeBillDescription = (event) => {
-    const description = event.target.value;
     setBill({
       ...bill,
-      description: description,
+      description: event.target.value,
+    });
+  };
+
+  const handlerChangeBillDate = (event) => {
+    setBill({
+      ...bill,
+      date: event.target.value,
     });
   };
 
   const handlerChangeBillPaymentEqual = (event) => {
-    const dBillChecked = event.target;
     setBill({
       ...bill,
-      'isPaymentEqual': dBillChecked.checked,
+      'isPaymentEqual': event.target.checked,
     });
   };
 
@@ -98,7 +130,7 @@ function Home() {
           <div className="container_payment_data">
             <input
               className="bill_input"
-              type="text"
+              type="number"
               name="payment"
               placeholder="Cuanto gastaste?"
               value={bill.paymentWithDot}
@@ -111,6 +143,13 @@ function Home() {
               placeholder="En que lo gastaste?"
               value={bill.description}
               onChange={handlerChangeBillDescription}
+            />
+            <input
+              className="bill_input"
+              type="date"
+              name="date"
+              value={bill.date}
+              onChange={handlerChangeBillDate}
             />
             <div className="bill_checkbox_container">
               <label>

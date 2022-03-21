@@ -1,6 +1,7 @@
 const mysqlLib = require('../lib/mysql');
+const dateFormat = require('../lib/dateFormat');
 
-billsService = {
+const billsService = {
   isPaymentEqual: async function(billId) {
     const billData = await mysqlLib.selectRow(
       ['is_payment_equal isPaymentEqual'],
@@ -25,6 +26,7 @@ billsService = {
         'b.description',
         'b.payment',
         'b.is_payment_equal isPaymentEqual',
+        'b.created_on createdOn',
         'd.name debtorName',
         'bd.id debtorInBillId',
         'bd.paid debtorPaid',
@@ -40,19 +42,30 @@ billsService = {
       ],
       [userId],
       [
-        'ORDER BY b.id DESC',
+        'ORDER BY b.created_on DESC',
       ]
     )
     .then(bills => bills)
     .catch(err => console.log(err));
 
     let billsReturn = [];
+    let dates = [];
     bills.forEach(bill => {
       if (!billsReturn.find(billReturn => billReturn.id === bill.id)) {
+        const createdOn = dateFormat.change(bill.createdOn);
+        let dateShow = false;
+        if (dates.indexOf(createdOn) === -1) {
+          dates.push(createdOn);
+          dateShow = true;
+        }
+
         billsReturn.push({
           id: bill.id,
           description: bill.description,
           isPaymentEqual: (bill.isPaymentEqual === 1),
+          createdOn: bill.createdOn,
+          dateCreatedOn: createdOn,
+          dateShow: dateShow,
           payment: bill.payment,
           paidOut: 0,
           debtors: [],
@@ -81,22 +94,29 @@ billsService = {
 
     return billsReturn;
   },
-  create: async function(userId, payment, description, isPaymentEqual) {
+  create: async function(userId, payment, description, isPaymentEqual, date) {
     if (!userId || !description || !payment) {
       return 0;
     }
 
-    const billId = await mysqlLib.insert(
-      {
-        user_id: userId,
-        description,
-        payment,
-        payment_type_id: 1,
-        is_payment_equal: isPaymentEqual,
-      },
-      'bill'
-    ).then(billId => billId)
-    .catch(err => console.log(err));
+    const billInsert = {
+      user_id: userId,
+      description,
+      payment,
+      payment_type_id: 1,
+      is_payment_equal: isPaymentEqual,
+    };
+
+    if (date) {
+      billInsert['created_on'] = date;
+    }
+
+    const billId = await (
+      mysqlLib
+      .insert(billInsert, 'bill')
+      .then(billId => billId)
+      .catch(err => console.log(err))
+    );
 
     return (billId || 0);
   },

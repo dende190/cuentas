@@ -10,10 +10,16 @@
   text-decoration: none;
   color: black;
   display: inline;
+  font-size: 17px;
   cursor: pointer;
 }
 
 .links:hover {
   text-decoration: underline;
   color: #747474;
+}
+
+.header_button {
+  background: none;
+  border: none;
 }

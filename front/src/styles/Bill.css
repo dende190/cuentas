@@ -1,3 +1,13 @@
+.bill_date {
+  position: sticky;
+  top: 30px;
+  background-color: #ffffff;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
 .container_bill {
   display: flex;
   flex-direction: column;

@@ -11,6 +11,8 @@ function Bill(props) {
     debtors,
     isPaymentEqual,
     paidOut,
+    dateCreatedOn,
+    dateShow,
   } = props.data;
   const [debtorList, setDebtorList] = useState(debtors);
   const [billPaidOut, setBillPaidOut] = useState(paidOut);
@@ -48,6 +50,9 @@ function Bill(props) {
 
   return (
     <Fragment>
+      <h1 className="bill_date">
+        {dateShow && dateCreatedOn}
+      </h1>
       <div className="container_bill">
         <h1 className="bill_title">
           {description}
