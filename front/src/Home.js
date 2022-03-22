@@ -130,7 +130,7 @@ function Home() {
           <div className="container_payment_data">
             <input
               className="bill_input"
-              type="number"
+              type="text"
               name="payment"
               placeholder="Cuanto gastaste?"
               value={bill.paymentWithDot}
