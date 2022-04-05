@@ -45,9 +45,31 @@
   font-weight: bold;
   padding: 12px;
   border-radius: 9px;
+  cursor: pointer;
+}
+
+.bill_button:disabled {
+  background-color: #cccccc;
+  cursor: wait;
 }
 
 .bill {
   margin-top: 4px;
   font-size: 18px;
+}
+
+@media (max-width: 427px) {
+  .bill_input {
+    margin-bottom:10px;
+  }
+
+  .bill_input.date {
+    width: 69%;
+  }
+}
+
+@media (max-width: 375px) {
+  .bill_input.date {
+    width: 82%;
+  }
 }

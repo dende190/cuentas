@@ -10,15 +10,16 @@ function Home() {
   if (!localStorage.token) {
     window.location.href = '/iniciar_sesion';
   }
-
-  const [billsList, setBillsList] = useState([]);
-  const [bill, setBill] = useState({
+  const billInit = {
     payment: '',
-    paymentWithDot: '',
     description: '',
+    paymentWithDot: '',
     date: '',
     isPaymentEqual: true,
-  });
+  };
+  const [billsList, setBillsList] = useState([]);
+  const [bill, setBill] = useState(billInit);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   useEffect(async () => {
     const billsRequest = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/obtener`,
@@ -37,6 +38,7 @@ function Home() {
 
   const handlerSubmitBill = async (event) => {
     event.preventDefault();
+    setButtonDisabled(true);
     const billDataResponse = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/crear`,
       {
@@ -66,13 +68,8 @@ function Home() {
     );
 
     setBillsList(billSort);
-    setBill({
-      payment: '',
-      description: '',
-      paymentWithDot: '',
-      date: '',
-      isPaymentEqual: true,
-    });
+    setBill(billInit);
+    setButtonDisabled(false);
   };
 
   const handlerChangeBillPayment = (event) => {
@@ -114,7 +111,7 @@ function Home() {
   const handlerChangeBillPaymentEqual = (event) => {
     setBill({
       ...bill,
-      'isPaymentEqual': event.target.checked,
+      isPaymentEqual: event.target.checked,
     });
   };
 
@@ -145,7 +142,7 @@ function Home() {
               onChange={handlerChangeBillDescription}
             />
             <input
-              className="bill_input"
+              className="bill_input date"
               type="date"
               name="date"
               value={bill.date}
@@ -163,7 +160,7 @@ function Home() {
               </label>
             </div>
           </div>
-          <button className="bill_button">
+          <button disabled={buttonDisabled} className="bill_button">
             Agregar
           </button>
         </form>
