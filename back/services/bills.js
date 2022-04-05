@@ -39,6 +39,8 @@ const billsService = {
       ],
       [
         ['b.user_id', '?'],
+        'AND',
+        ['b.status', 1],
       ],
       [userId],
       [
@@ -147,10 +149,10 @@ const billsService = {
 
     const expensePerDebtor = Math.round(payment / debtorCount);
     await mysqlLib.update(
-      'expense = ?',
-      expensePerDebtor,
-      'bill_id = ?',
-      billId,
+      {expense: expensePerDebtor},
+      [
+        ['bill_id', billId],
+      ],
       'bill_debtor'
     );
 

@@ -59,34 +59,7 @@ const mysqlLib = {
     });
 
     if (wheres.length) {
-      query += 'WHERE ';
-      wheres.forEach(where => {
-        if (!Array.isArray(where)) {
-          query += (where.toUpperCase() + ' ');
-          return;
-        }
-
-        const condition2 = where[1];
-        if (Array.isArray(condition2)) {
-          query += (where[0] + ' IN (');
-          condition2.forEach((value, index) => {
-            query += (
-              value +
-              (
-                index !== (condition2.length - 1) ?
-                ',' :
-                ''
-              ) +
-              ' '
-            );
-          });
-          query += ') ';
-          return;
-        }
-
-        let operator = (where[2] || ' = ');
-        query += (where[0] + operator + condition2 + ' ');
-      });
+      query += this.createWhere(wheres);
     }
 
     if (others.length) {
@@ -142,14 +115,12 @@ const mysqlLib = {
       );
     });
   },
-  update: function(set, setParam, where, whereParam, table) {
+  update: function(set, wheres, table) {
+    const query = ('UPDATE ' + table + ' SET ? ' + this.createWhere(wheres));
     return new Promise((resolve, reject) => {
       this.connection.query(
-        `UPDATE ${table} SET ${set} WHERE ${where}`,
-        [
-          setParam,
-          whereParam,
-        ],
+        query,
+        [set],
         (err, result) => {
           if (err) {
             return reject(err);
@@ -159,6 +130,40 @@ const mysqlLib = {
         }
       );
     });
+  },
+  createWhere: function(wheres) {
+    let queryWhere = 'WHERE ';
+    wheres.forEach(where => {
+      if (!Array.isArray(where)) {
+        queryWhere += (where.toUpperCase() + ' ');
+        return;
+      }
+
+      let condition2 = where[1];
+      if (Array.isArray(condition2)) {
+        queryWhere += (where[0] + ' IN (');
+        condition2.forEach((value, index) => {
+          queryWhere += (
+            this.connection.escape(value) +
+            (
+              index !== (condition2.length - 1) ?
+              ',' :
+              ''
+            ) +
+            ' '
+          );
+        });
+        queryWhere += ') ';
+        return;
+      }
+
+      let operator = (where[2] || ' = ');
+      if (condition2 !== '?') {
+        condition2 = this.connection.escape(condition2);
+      }
+      queryWhere += (where[0] + operator + condition2 + ' ');
+    });
+    return queryWhere;
   }
 }
 

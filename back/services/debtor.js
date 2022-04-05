@@ -64,10 +64,10 @@ const debtorService = {
       return debtorInBill.id;
     } else if (debtorInBill && debtorInBill.status !== 1) {
       await mysqlLib.update(
-        'status = ?',
-        1,
-        'id = ?',
-        debtorInBill.id,
+        {status: 1},
+        [
+          ['id', debtorInBill.id],
+        ],
         'bill_debtor'
       );
       return debtorInBill.id;
@@ -92,10 +92,10 @@ const debtorService = {
     }
 
     await mysqlLib.update(
-      'paid = ?',
-      paid,
-      'id = ?',
-      debtorInBillId,
+      {paid: paid},
+      [
+        ['id', debtorInBillId]
+      ],
       'bill_debtor'
     );
   },
@@ -116,10 +116,10 @@ const debtorService = {
     .catch(err => console.log(err));
 
     await mysqlLib.update(
-      'status = ?',
-      '-1',
-      'id = ?',
-      debtorInBillId,
+      {status: -1},
+      [
+        ['id', debtorInBillId],
+      ],
       'bill_debtor'
     );
 
