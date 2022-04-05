@@ -22,7 +22,7 @@
   cursor: pointer;
   text-align: center;
   position: absolute;
-  fill:#000000;
+  fill: #000000;
 }
 
 .debtor_checkbox:checked + .debtor_expanse {

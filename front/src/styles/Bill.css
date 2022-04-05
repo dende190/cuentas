@@ -26,3 +26,11 @@
 .bill_payment {
   margin-right: 16px;
 }
+
+.bill_trash {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  fill: #000000;
+}

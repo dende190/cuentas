@@ -175,6 +175,21 @@ const billsService = {
     .catch(err => console.log(err));
 
     return dataForPayment.paidOut;
+  },
+  delete: async function(userId, billId) {
+    if (!userId || !billId) {
+      return;
+    }
+
+    const a = await mysqlLib.update(
+      {status: -1},
+      [
+        ['id', billId],
+        'AND',
+        ['user_id', userId],
+      ],
+      'bill'
+    );
   }
 };
 

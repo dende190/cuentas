@@ -75,6 +75,17 @@ function billsRoute(app) {
       .json(jsonReturn)
     );
   });
+
+  router.post('/eliminar', async (req, res, next) => {
+    if (!req.body.token) {
+      res.status(301).json({error: true});
+      return;
+    }
+
+    const userData = jwt.decode(req.body.token);
+    await billsService.delete(userData.id, req.body.billId);
+    res.status(200).json({});
+  });
 }
 
 module.exports = billsRoute;
