@@ -1,5 +1,5 @@
 {
-  "name": "anotaciones",
+  "name": "cuentas",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,31 +9,31 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dende190/anotaciones.git"
+    "url": "git+https://github.com/dende190/cuentas.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dende190/anotaciones/issues"
+    "url": "https://github.com/dende190/cuentas/issues"
   },
-  "homepage": "https://github.com/dende190/anotaciones#readme",
+  "homepage": "https://github.com/dende190/cuentas#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^12.0.3",
-    "express": "^4.17.2",
+    "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3"
   },
   "devDependencies": {
-    "eslint": "^8.7.0",
+    "eslint": "^8.16.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
-    "lint-staged": "^12.1.7",
-    "prettier": "^2.5.1"
+    "lint-staged": "^12.4.2",
+    "prettier": "^2.6.2"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
