@@ -2,6 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const debtorService = require('../services/debtor');
 const billsService = require('../services/bills');
+const usersService = require('../services/users');
+const DEBTOR_DEFAULT_ID = 1;
 
 function debtorRoute(app) {
   const router = express.Router();
@@ -43,7 +45,12 @@ function debtorRoute(app) {
     const debtorData = req.body;
     await debtorService.changePay(debtorData.debtorInBillId, debtorData.paid);
     const paidOut = await billsService.getPaidOut(req.body.billId);
-    res.status(200).json(paidOut);
+    const userData = jwt.decode(req.body.token);
+    const currentSalaryAndBills = await (
+      usersService
+      .getCurrentSalaryAndBills(userData.id)
+    );
+    res.status(200).json({paidOut: (paidOut || 0), currentSalaryAndBills});
   });
 
   router.post('/eliminar', async (req, res, next) => {
