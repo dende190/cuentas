@@ -93,23 +93,28 @@ const usersService = {
         (
           'SUM(' +
             'IF(' +
-              'debtor_id = ' + DEBTOR_DEFAULT_ID + ' AND paid = 1, ' +
-              'expense, ' +
+              'bd.debtor_id = ' + DEBTOR_DEFAULT_ID + ' AND bd.paid = 1, ' +
+              'bd.expense, ' +
               'IF(' +
-                'debtor_id != ' + DEBTOR_DEFAULT_ID + ' AND paid = 0, ' +
-                'expense, ' +
+                'bd.debtor_id != ' + DEBTOR_DEFAULT_ID + ' AND bd.paid = 0, ' +
+                'bd.expense, ' +
                 '0' +
               ')' +
             ')' +
           ') totalBills'
         ),
       ],
-      ['bill_debtor'],
       [
-        ['status', 1],
+        'bill_debtor bd',
+        'JOIN bill b ON b.id = bd.bill_id'
+      ],
+      [
+        ['bd.status', 1],
+        'AND',
+        ['b.status', 1],
         'AND',
         [
-          'modified_on',
+          'bd.modified_on',
           (
             '"' +
             (
