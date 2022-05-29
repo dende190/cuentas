@@ -137,14 +137,14 @@ const mysqlLib = {
         return;
       }
 
-      let condition2 = where[1];
-      if (Array.isArray(condition2)) {
+      let condition = where[1];
+      if (Array.isArray(condition)) {
         queryWhere += (where[0] + ' IN (');
-        condition2.forEach((value, index) => {
+        condition.forEach((value, index) => {
           queryWhere += (
             this.connection.escape(value) +
             (
-              index !== (condition2.length - 1) ?
+              index !== (condition.length - 1) ?
               ',' :
               ''
             ) +
@@ -155,11 +155,13 @@ const mysqlLib = {
         return;
       }
 
-      let operator = (where[2] || ' = ');
-      if (condition2 !== '?') {
-        condition2 = this.connection.escape(condition2);
-      }
-      queryWhere += (where[0] + operator + condition2 + ' ');
+      let operator = (' ' + (where[2] || '=') + ' ');
+      condition = (
+        (where[3] === false) ?
+        condition :
+        this.connection.escape(condition)
+      );
+      queryWhere += (where[0] + operator + condition + ' ');
     });
     return queryWhere;
   }
