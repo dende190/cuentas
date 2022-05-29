@@ -70,7 +70,9 @@ function ConfigurationModal({
         <button className="modal-close" onClick={handlerhideModal}>
           x
         </button>
-        <h1>Configuracion:</h1>
+        <h1 className="modalTitle">
+          Configuracion:
+        </h1>
         <form
           method="post"
           onSubmit={handlerSubmit}

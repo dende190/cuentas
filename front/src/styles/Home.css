@@ -108,13 +108,36 @@
   cursor: pointer;
 }
 
-@media (max-width: 427px) {
+@media (max-width: 450px) {
   .bill_input {
     margin-bottom:10px;
+    height: 8px;
+    width: 100%;
   }
 
   .bill_input.date {
-    width: 69%;
+    height: 8px;
+    width: 98%;
+  }
+
+  .form_search-inputs {
+    width: 50%;
+  }
+
+  .form_search-container {
+    display: flex;
+  }
+
+  .form_search-checkbox_without_pay {
+    font-size: 14px;
+  }
+
+  .form_search-checkbox_seach_only_debtors {
+    font-size: 14px;
+  }
+
+  .bill_checkbox_container {
+    font-size: 14px;
   }
 }
 

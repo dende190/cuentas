@@ -65,7 +65,7 @@ function Header({
           ''
         }
       </div>
-      <div>
+      <div className="header-links">
         <button
           className="header_button links"
           onClick={handlerShowModal}

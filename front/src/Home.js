@@ -261,23 +261,21 @@ function Home() {
               value={bill.date}
               onChange={handlerChangeBillDate}
             />
-            <div className="bill_checkbox_container">
-              <label>
-                Gasto dividido por partes iguales:
-                <input
-                  className="bill_checkbox"
-                  type="checkbox"
-                  defaultChecked={bill.isPaymentEqual}
-                  onChange={handlerChangeBillPaymentEqual}
-                />
-              </label>
-            </div>
+            <label className="bill_checkbox_container">
+              Gasto dividido por partes iguales:
+              <input
+                className="bill_checkbox"
+                type="checkbox"
+                defaultChecked={bill.isPaymentEqual}
+                onChange={handlerChangeBillPaymentEqual}
+              />
+            </label>
           </div>
           <button disabled={buttonDisabled} className="bill_button">
             Agregar
           </button>
         </form>
-        <div>
+        <div className="form_search-container">
           <form
             method="post"
             className="form_search"
@@ -303,7 +301,7 @@ function Home() {
                     onChange={handlerChangeCheckbox}
                   />
                 </label>
-                <label>
+                <label className="form_search-checkbox_seach_only_debtors">
                   Solo deudores
                   <input
                     type="checkbox"

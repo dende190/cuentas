@@ -44,3 +44,50 @@
 .bills_information-total_bills {
   margin: 0 20px;
 }
+
+@media (max-width: 770px) {
+  .bills_information-current_salary {
+    font-size: 12px;
+  }
+
+  .bills_information-total_expense {
+    font-size: 12px;
+  }
+
+  .bills_information-total_bills {
+    font-size: 12px;
+  }
+
+  .header_button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 450px) {
+  .bills_information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bills_information-current_salary {
+    margin-top: -20px;
+  }
+
+  .bills_information-total_expense {
+    margin-top: 4px;
+  }
+
+  .bills_information-total_bills {
+    margin-top: 4px;
+  }
+
+  .header-links {
+    display: inherit;
+  }
+
+  .links {
+    margin-left: 0;
+  }
+}
