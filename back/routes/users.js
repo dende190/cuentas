@@ -1,8 +1,8 @@
 const express = require('express');
+const {config} = require('../config/config');
 const loginServices = require('../services/login');
 const usersServices = require('../services/users');
 const jwt = require('jsonwebtoken');
-const jwtKey = 'z3FZjftGDWCr7N';
 
 function usersRoute(app) {
   const router = express.Router();
@@ -17,7 +17,7 @@ function usersRoute(app) {
 
     const token = jwt.sign(
       userData,
-      jwtKey,
+      config.jwtKey,
       {expiresIn: '1d'}
     );
 
