@@ -1,4 +1,8 @@
 function addDotInNumberText(numberText) {
+  if (!numberText) {
+    return '0';
+  }
+
   numberText = numberText.toString();
   let numberTextLength = numberText.length;
   let numberTextLengthDismiss = numberText.length;
