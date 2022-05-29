@@ -42,6 +42,7 @@ function Home() {
   };
   const [search, setSearch] = useState(searchInit);
   const [totalExpense, setTotalExpense] = useState(0);
+  const [totalBill, setTotalBill] = useState(0);
   const dFormSearch = useRef();
   const dFormSearchButtonSubmit = useRef();
   useEffect(async () => {
@@ -56,7 +57,7 @@ function Home() {
       }
     );
 
-    const {billsReturn, totalExpense} = await billsRequest.json();
+    const {billsReturn} = await billsRequest.json();
     setBillsList(billsReturn);
 
     const userConfigurationRequest = await fetch(
@@ -194,9 +195,10 @@ function Home() {
       }
     );
 
-    const {billsReturn, totalExpense} = await billsRequest.json();
+    const {billsReturn, totalExpense, totalBill} = await billsRequest.json();
     setBillsList(billsReturn);
     setTotalExpense(totalExpense);
+    setTotalBill(totalBill);
   };
 
   const handlerChangeSearch = (event) => {
@@ -212,7 +214,6 @@ function Home() {
       ...search,
       [dCheckbox.name]: dCheckbox.checked,
     });
-    console.log(search);
   };
 
   const handlerResetSearch = async () => {
@@ -228,6 +229,7 @@ function Home() {
         setShowConfiguration={setShowConfiguration}
         userCurrentSalaryAndBills={userCurrentSalaryAndBills}
         totalExpense={totalExpense}
+        totalBill={totalBill}
       />
       <div>
         <form

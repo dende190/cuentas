@@ -37,6 +37,10 @@
   color: red;
 }
 
-.bills_information-total_bills {
+.bills_information-total_expense {
   margin: 0;
+}
+
+.bills_information-total_bills {
+  margin: 0 20px;
 }

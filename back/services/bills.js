@@ -70,6 +70,7 @@ const billsService = {
     let billsReturn = [];
     let dates = [];
     let totalExpense = 0;
+    let totalBill = 0;
     bills.forEach(bill => {
       if (!billsReturn.find(billReturn => billReturn.id === bill.id)) {
         const createdOn = dateFormat.change(bill.createdOn);
@@ -100,6 +101,8 @@ const billsService = {
       );
       if (bill.debtorPaid === 1) {
         billsReturn[billsReturnIndex].paidOut += bill.debtorExpense;
+      } else {
+        totalBill += bill.debtorExpense;
       }
 
       if (!bill.debtorInBillId) {
@@ -110,13 +113,14 @@ const billsService = {
         id: bill.debtorInBillId,
         name: bill.debtorName,
         paid: bill.debtorPaid,
-        expense: bill.debtorExpense
+        expense: bill.debtorExpense,
       });
     });
 
     return {
       billsReturn,
-      totalExpense: ((search && search.name) ? totalExpense : 0)
+      totalExpense: ((search && search.name) ? totalExpense : 0),
+      totalBill: ((search && search.name) ? totalBill : 0),
     };
   },
   create: async function(userId, payment, description, isPaymentEqual, date) {

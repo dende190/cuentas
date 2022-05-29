@@ -17,11 +17,11 @@ function billsRoute(app) {
     }
 
     const userData = jwt.decode(req.body.token);
-    const {billsReturn, totalExpense} = await (
+    const billReturn = await (
       billsService
       .getAllForUser(userData.id, req.body.search)
     );
-    res.status(200).json({billsReturn, totalExpense});
+    res.status(200).json(billReturn);
   });
 
   router.post('/crear', async (req, res, next) => {

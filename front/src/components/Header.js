@@ -7,7 +7,8 @@ function Header({
   showConfiguration,
   setShowConfiguration,
   userCurrentSalaryAndBills,
-  totalExpense
+  totalExpense,
+  totalBill
 }) {
   const handlerDownloadBillsReport = async function() {
     const billsReport = await fetch(
@@ -45,7 +46,7 @@ function Header({
           Sueldo Actual:
           {addDotInNumberText(userCurrentSalaryAndBills.currentSalary)}
         </h3>
-        <h3 className="bills_information-total_bills">
+        <h3 className="bills_information-total_expense">
           Gastos:
           {(
             totalExpense ?
@@ -53,6 +54,16 @@ function Header({
             addDotInNumberText(userCurrentSalaryAndBills.totalBills)
           )}
         </h3>
+        {
+          totalBill > 0 ?
+          (
+            <h3 className="bills_information-total_bills">
+              Deuda:
+              {addDotInNumberText(totalBill)}
+            </h3>
+          ) :
+          ''
+        }
       </div>
       <div>
         <button
