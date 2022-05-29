@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const billsService = require('../services/bills');
 const debtorService = require('../services/debtor');
+const usersService = require('../services/users');
 const dateFormat = require('../lib/dateFormat');
 const DEBTOR_DEFAULT_NAME = 'yo';
 
@@ -36,10 +37,11 @@ function billsRoute(app) {
       billData.date
     );
     const createdOn = (billData.date || new Date());
-    let jsonReturn = {
+    let bill = {
       id: billId,
       description: billData.description,
       payment: billData.payment,
+      paidOut: billData.payment,
       isPaymentEqual: billData.isPaymentEqual,
       createdOn: createdOn,
       dateCreatedOn: dateFormat.change(createdOn),
@@ -51,7 +53,7 @@ function billsRoute(app) {
       (
         res
         .status(200)
-        .json(jsonReturn)
+        .json(bill)
       );
       return;
     }
@@ -62,7 +64,12 @@ function billsRoute(app) {
       .addInBill(debtorId, billId, billData.payment, true)
     );
 
-    jsonReturn.debtors = [{
+    const currentSalaryAndBills = await (
+      usersService
+      .getCurrentSalaryAndBills(userData.id)
+    );
+
+    bill.debtors = [{
       id: debtorInBillId,
       name: DEBTOR_DEFAULT_NAME,
       paid: true,
@@ -72,7 +79,7 @@ function billsRoute(app) {
     (
       res
       .status(200)
-      .json(jsonReturn)
+      .json({bill, currentSalaryAndBills})
     );
   });
 
