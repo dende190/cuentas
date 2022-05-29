@@ -164,7 +164,10 @@ const mysqlLib = {
       queryWhere += (where[0] + operator + condition + ' ');
     });
     return queryWhere;
-  }
+  },
+  escapeString: function(string) {
+    return this.connection.escape(string);
+  },
 }
 
 try {
