@@ -19,9 +19,9 @@ const mysqlLib = {
       database: NAME,
     });
   },
-  query: function(query, params = [], row = false) {
+  query: function(query, row = false) {
     return new Promise((resolve, reject) => {
-      this.connection.query(query, params, (err, results) => {
+      this.connection.query(query, (err, results) => {
         if (err) {
           return reject(err);
         }
@@ -74,7 +74,6 @@ const mysqlLib = {
     columns,
     form,
     wheres = [],
-    params = [],
     others = []
   ) {
     const query = this.contructSelect(
@@ -83,13 +82,12 @@ const mysqlLib = {
       wheres,
       others
     );
-    return this.query(query, params);
+    return this.query(query);
   },
   selectRow: function(
     columns,
     form,
     wheres = [],
-    params = [],
     others = []
   ) {
     const query = this.contructSelect(
@@ -98,7 +96,7 @@ const mysqlLib = {
       wheres,
       others
     );
-    return this.query(query, params, true);
+    return this.query(query, true);
   },
   insert: function(values, table) {
     return new Promise((resolve, reject) => {

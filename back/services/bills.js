@@ -7,9 +7,8 @@ const billsService = {
       ['is_payment_equal isPaymentEqual'],
       ['bill'],
       [
-        ['id', '?'],
-      ],
-      [billId]
+        ['id', billId],
+      ]
     )
     .then(billData => billData)
     .catch(err => console.log(err));
@@ -38,11 +37,10 @@ const billsService = {
         'LEFT JOIN debtor d ON d.id = bd.debtor_id',
       ],
       [
-        ['b.user_id', '?'],
+        ['b.user_id', userId],
         'AND',
         ['b.status', 1],
       ],
-      [userId],
       [
         'ORDER BY b.created_on DESC',
       ]
@@ -135,9 +133,8 @@ const billsService = {
       [
         ['bd.status', 1],
         'AND',
-        ['bd.bill_id', '?'],
-      ],
-      [billId]
+        ['bd.bill_id', billId],
+      ]
     )
     .then(dataForPayment => dataForPayment)
     .catch(err => console.log(err));
@@ -167,9 +164,8 @@ const billsService = {
         'AND',
         ['paid', 1],
         'AND',
-        ['bill_id', '?'],
-      ],
-      [billId]
+        ['bill_id', billId],
+      ]
     )
     .then(dataForPayment => dataForPayment)
     .catch(err => console.log(err));

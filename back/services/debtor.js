@@ -6,9 +6,8 @@ const debtorService = {
       ['id'],
       ['debtor'],
       [
-        ['name', '?'],
-      ],
-      [name]
+        ['name', name],
+      ]
     )
     .then(debtor => debtor)
     .catch(err => console.log(err));
@@ -48,13 +47,9 @@ const debtorService = {
       ],
       ['bill_debtor'],
       [
-        ['debtor_id', '?'],
+        ['debtor_id', debtorId],
         'AND',
-        ['bill_id', '?'],
-      ],
-      [
-        debtorId,
-        billId,
+        ['bill_id', billId],
       ]
     )
     .then(debtorInBill => debtorInBill)
@@ -108,9 +103,8 @@ const debtorService = {
       ['bill_id billId'],
       ['bill_debtor'],
       [
-        ['id', '?'],
-      ],
-      [debtorInBillId]
+        ['id', debtorInBillId],
+      ]
     )
     .then(billData => billData)
     .catch(err => console.log(err));

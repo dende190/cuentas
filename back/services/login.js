@@ -17,11 +17,10 @@ const loginService = {
       ],
       ['user'],
       [
-        ['email', '?'],
+        ['email', email],
         'AND',
         ['status', 1],
-      ],
-      [email]
+      ]
     )
     .then(userResult => userResult)
     .catch(err => console.log(err));

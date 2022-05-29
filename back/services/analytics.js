@@ -26,13 +26,12 @@ const analyticsService = {
         'JOIN debtor d ON d.id = bd.debtor_id',
       ],
       [
-        ['b.user_id', '?'],
+        ['b.user_id', userId],
         'AND',
         ['b.status', 1],
         'AND',
         ['bd.status', 1],
       ],
-      [userId],
       ['ORDER BY b.created_on DESC'],
     );
 
