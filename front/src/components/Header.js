@@ -50,9 +50,6 @@ function Header({
         </h3>
       </div>
       <div>
-        <Link to="/" className="links">
-          Inicio
-        </Link>
         <button
           className="header_button links"
           onClick={handlerShowModal}
