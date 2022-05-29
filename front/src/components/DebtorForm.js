@@ -71,7 +71,7 @@ function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
           />
           <button
             className="debtor_add"
-            disabled={!debtor.name /* || !debtor.expense*/}
+            disabled={!debtor.name}
           >
             Agregar
           </button>
