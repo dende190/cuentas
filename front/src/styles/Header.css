@@ -1,8 +1,9 @@
 .header {
   height: 45px;
-  text-align: end;
   padding: 30px 30px 0 0;
   background-color: rgba(187, 186, 186, 0.6);
+  display: flex;
+  justify-content: space-between;
 }
 
 .links {
@@ -22,4 +23,20 @@
 .header_button {
   background: none;
   border: none;
+}
+
+.bills_information {
+  display: flex;
+}
+
+.bills_information-current_salary {
+  margin: 0 20px;
+}
+
+.bills_information-current_salary.-alert {
+  color: red;
+}
+
+.bills_information-total_bills {
+  margin: 0;
 }

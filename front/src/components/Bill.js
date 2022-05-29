@@ -4,7 +4,7 @@ import DebtorList from './DebtorList';
 import Trash from '../img/trash.png';
 import '../styles/Bill.css'
 
-function Bill(props) {
+function Bill({data, setUserCurrentSalaryAndBills}) {
   const {
     id,
     description,
@@ -14,7 +14,7 @@ function Bill(props) {
     paidOut,
     dateCreatedOn,
     dateShow,
-  } = props.data;
+  } = data;
   const [debtorList, setDebtorList] = useState(debtors);
   const [billPaidOut, setBillPaidOut] = useState(paidOut);
   const handlerAddDebtor = async (debtor) => {
@@ -100,6 +100,7 @@ function Bill(props) {
           list={debtorList}
           setList={setDebtorList}
           setBillPaidOut={setBillPaidOut}
+          setUserCurrentSalaryAndBills={setUserCurrentSalaryAndBills}
         />
       </div>
     </Fragment>

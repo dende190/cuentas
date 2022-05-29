@@ -2,6 +2,7 @@ import {Fragment, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './components/Header';
 import Bill from './components/Bill';
+import ConfigurationModal from './components/ConfigurationModal';
 import addDotInNumberText from './utils/addDotInNumberText';
 import './styles/form.css';
 import './styles/Home.css'
@@ -20,12 +21,26 @@ function Home() {
   const [billsList, setBillsList] = useState([]);
   const [bill, setBill] = useState(billInit);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [showConfiguration, setShowConfiguration] = useState(false);
+  const [configuration, setConfiguration] = useState({
+    salary: 0,
+    salaryWithDot: '',
+    payday: 0,
+    percentageAlertExpense: 0,
+  });
+  const [userCurrentSalaryAndBills, setUserCurrentSalaryAndBills] = (
+    useState({
+      currentSalary: 0,
+      totalBills: 0,
+      alertExpense: false,
+    })
+  );
   useEffect(async () => {
     const billsRequest = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/obtener`,
       {
         method: 'post',
-        body: JSON.stringify({token: localStorage.token, userId: 1}),
+        body: JSON.stringify({token: localStorage.token}),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -34,6 +49,42 @@ function Home() {
 
     const billsJson = await billsRequest.json();
     setBillsList(billsJson);
+
+    const userConfigurationRequest = await fetch(
+      `${process.env.REACT_APP_URL_API}usuario/obtenerConfiguracion`,
+      {
+        method: 'post',
+        body: JSON.stringify({token: localStorage.token}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    const userConfigurationJson = await userConfigurationRequest.json();
+    if (Object.values(userConfigurationJson).length) {
+      setConfiguration({
+        ...userConfigurationJson,
+        salaryWithDot: addDotInNumberText(userConfigurationJson.salary),
+      });
+    }
+
+    const userCurrentSalaryAndBillsRequest = await fetch(
+      `${process.env.REACT_APP_URL_API}usuario/obtenerSueldosActualYGastos`,
+      {
+        method: 'post',
+        body: JSON.stringify({token: localStorage.token}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    const userCurrentSalaryAndBillsJson = await (
+      userCurrentSalaryAndBillsRequest
+      .json()
+    );
+    setUserCurrentSalaryAndBills(userCurrentSalaryAndBillsJson);
   }, []);
 
   const handlerSubmitBill = async (event) => {
@@ -52,7 +103,7 @@ function Home() {
 
     const billDataJson = await billDataResponse.json();
     const billSort = (
-      [billDataJson, ...billsList]
+      [billDataJson.bill, ...billsList]
       .sort((after, before) => {
         let afterCreatedOn = after.createdOn;
         let beforeCreatedOn = before.createdOn;
@@ -70,6 +121,7 @@ function Home() {
     setBillsList(billSort);
     setBill(billInit);
     setButtonDisabled(false);
+    setUserCurrentSalaryAndBills(billDataJson.currentSalaryAndBills);
   };
 
   const handlerChangeBillPayment = (event) => {
@@ -117,7 +169,11 @@ function Home() {
 
   return (
     <Fragment>
-      <Header />
+      <Header
+        showConfiguration={showConfiguration}
+        setShowConfiguration={setShowConfiguration}
+        userCurrentSalaryAndBills={userCurrentSalaryAndBills}
+      />
       <div>
         <form
           method="post"
@@ -127,7 +183,7 @@ function Home() {
           <div className="container_payment_data">
             <input
               className="bill_input"
-              type="text"
+              type="tel"
               name="payment"
               placeholder="Cuanto gastaste?"
               value={bill.paymentWithDot}
@@ -168,12 +224,22 @@ function Home() {
           billsList.length ?
           (
             billsList.map(bill => (
-              <Bill key={bill.id} data={bill}/>
+              <Bill
+                key={bill.id}
+                data={bill}
+                setUserCurrentSalaryAndBills={setUserCurrentSalaryAndBills}
+              />
             ))
           ) :
           (<h3>No hay deudas todavia</h3>)
         }
       </div>
+      <ConfigurationModal
+        showConfiguration={showConfiguration}
+        setShowConfiguration={setShowConfiguration}
+        configuration={configuration}
+        setConfiguration={setConfiguration}
+      />
     </Fragment>
   );
 }

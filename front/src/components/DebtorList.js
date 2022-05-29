@@ -2,7 +2,13 @@ import {useState} from 'react';
 import Debtor from './Debtor';
 import '../styles/DebtorList.css';
 
-function DebtorList({billId, list, setList, setBillPaidOut}) {
+function DebtorList({
+  billId,
+  list,
+  setList,
+  setBillPaidOut,
+  setUserCurrentSalaryAndBills
+}) {
   const handlerChangePaid = async (event) => {
     const dDebtorCheck = event.target;
     const paidOutResponse = await fetch(
@@ -23,8 +29,11 @@ function DebtorList({billId, list, setList, setBillPaidOut}) {
         },
       }
     );
-    const paidOut = await paidOutResponse.json();
-    setBillPaidOut(paidOut);
+    const paidOutJson = await paidOutResponse.json();
+    setBillPaidOut(paidOutJson.paidOut);
+    if (Object.values(paidOutJson.currentSalaryAndBills).length) {
+      setUserCurrentSalaryAndBills(paidOutJson.currentSalaryAndBills);
+    }
   };
 
   const handlerClickDebtorDelete = async (event) => {
