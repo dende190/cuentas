@@ -87,7 +87,8 @@ const usersService = {
 
     const today = new Date();
     const currentYear = today.getFullYear();
-    const lastMonth = (today.getMonth() === 0 ? 12 : today.getMonth());
+    const currentMonth = (today.getMonth() + 1);
+    const nextMonth = ((currentMonth + 1 === 13) ? 1 : currentMonth + 1);
     const totalBills = await mysqlLib.selectRow(
       [
         (
@@ -118,17 +119,17 @@ const usersService = {
           (
             '"' +
             (
-              (lastMonth === 12 ? currentYear - 1 : currentYear) +
+              currentYear +
               '-' +
-              lastMonth +
+              ((currentMonth < 10) ? ('0' + currentMonth) : currentMonth) +
               '-' +
               payday
             )  +
             '" AND "' +
               (
-                currentYear +
+                (currentMonth === 12 ? currentYear + 1 : currentYear) +
                 '-' +
-                (lastMonth + 1) +
+                ((nextMonth < 10) ? ('0' + nextMonth) : nextMonth) +
                 '-' +
                 payday
               ) +
@@ -141,7 +142,6 @@ const usersService = {
     )
     .then(currentBillsData => currentBillsData.totalBills)
     .catch(err => console.log(err));
-
     const currentSalary = (salary - totalBills);
     return {
       currentSalary,
