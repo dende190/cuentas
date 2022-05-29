@@ -3,6 +3,7 @@ import DebtorForm from './DebtorForm';
 import DebtorList from './DebtorList';
 import Trash from '../img/trash.png';
 import '../styles/Bill.css'
+import addDotInNumberText from './../utils/addDotInNumberText';
 
 function Bill({data, setUserCurrentSalaryAndBills}) {
   const {
@@ -79,9 +80,9 @@ function Bill({data, setUserCurrentSalaryAndBills}) {
           </h1>
           <div className="container_bill-payments">
             <p className="bill_payment">
-              Total deuda: {payment}
+              Total deuda: {addDotInNumberText(payment)}
             </p>
-            <p>Total pagado: {billPaidOut}</p>
+            <p>Total pagado: {addDotInNumberText(billPaidOut)}</p>
             <button
               className="bill_trash"
               data-id={id}

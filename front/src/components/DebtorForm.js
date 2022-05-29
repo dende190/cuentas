@@ -54,7 +54,7 @@ function DebtorForm({handlerAddDebtor, isPaymentEqual}) {
           {
             isPaymentEqual ||
             <input
-              type="text"
+              type="tel"
               min="0"
               className="debtor_input"
               value={debtor.expenseWithDots}

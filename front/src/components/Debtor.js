@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import '../styles/Debtor.css';
 import Trash from '../img/trash.png';
+import addDotInNumberText from './../utils/addDotInNumberText';
 
 function Debtor({data, handlerChangePaid, handlerClickDebtorDelete}) {
   return (
@@ -15,7 +16,7 @@ function Debtor({data, handlerChangePaid, handlerClickDebtorDelete}) {
         />
         {data.name}
         <span className="debtor_expanse">
-          ({data.expense})
+          ({addDotInNumberText(data.expense)})
         </span>
       </label>
       <button

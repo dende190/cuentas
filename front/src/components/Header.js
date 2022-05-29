@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
-import '../styles/Header.css'
 import generateExcel from '../utils/generateExcel';
+import '../styles/Header.css'
+import addDotInNumberText from './../utils/addDotInNumberText';
 
 function Header({
   showConfiguration,
