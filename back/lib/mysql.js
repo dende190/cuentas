@@ -133,7 +133,7 @@ const mysqlLib = {
     let queryWhere = 'WHERE ';
     wheres.forEach(where => {
       if (!Array.isArray(where)) {
-        queryWhere += (where.toUpperCase() + ' ');
+        queryWhere += (where + ' ');
         return;
       }
 
