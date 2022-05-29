@@ -41,7 +41,7 @@ function billsRoute(app) {
       id: billId,
       description: billData.description,
       payment: billData.payment,
-      paidOut: billData.payment,
+      paidOut: (billData.isPaymentEqual ? billData.payment : 0),
       isPaymentEqual: billData.isPaymentEqual,
       createdOn: createdOn,
       dateCreatedOn: dateFormat.change(createdOn),
@@ -53,7 +53,7 @@ function billsRoute(app) {
       (
         res
         .status(200)
-        .json(bill)
+        .json({bill, currentSalaryAndBills: {}})
       );
       return;
     }

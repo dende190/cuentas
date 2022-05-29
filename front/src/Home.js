@@ -121,7 +121,9 @@ function Home() {
     setBillsList(billSort);
     setBill(billInit);
     setButtonDisabled(false);
-    setUserCurrentSalaryAndBills(billDataJson.currentSalaryAndBills);
+    if (Object.values(billDataJson.currentSalaryAndBills).length) {
+      setUserCurrentSalaryAndBills(billDataJson.currentSalaryAndBills);
+    }
   };
 
   const handlerChangeBillPayment = (event) => {
