@@ -6,7 +6,8 @@ import addDotInNumberText from './../utils/addDotInNumberText';
 function Header({
   showConfiguration,
   setShowConfiguration,
-  userCurrentSalaryAndBills
+  userCurrentSalaryAndBills,
+  totalExpense
 }) {
   const handlerDownloadBillsReport = async function() {
     const billsReport = await fetch(
@@ -46,7 +47,11 @@ function Header({
         </h3>
         <h3 className="bills_information-total_bills">
           Gastos:
-          {addDotInNumberText(userCurrentSalaryAndBills.totalBills)}
+          {(
+            totalExpense ?
+            addDotInNumberText(totalExpense) :
+            addDotInNumberText(userCurrentSalaryAndBills.totalBills)
+          )}
         </h3>
       </div>
       <div>

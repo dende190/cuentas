@@ -56,8 +56,8 @@ function Home() {
       }
     );
 
-    const billsJson = await billsRequest.json();
-    setBillsList(billsJson);
+    const {billsReturn, totalExpense} = await billsRequest.json();
+    setBillsList(billsReturn);
 
     const userConfigurationRequest = await fetch(
       `${process.env.REACT_APP_URL_API}usuario/obtenerConfiguracion`,
@@ -227,6 +227,7 @@ function Home() {
         showConfiguration={showConfiguration}
         setShowConfiguration={setShowConfiguration}
         userCurrentSalaryAndBills={userCurrentSalaryAndBills}
+        totalExpense={totalExpense}
       />
       <div>
         <form

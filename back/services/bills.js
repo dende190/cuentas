@@ -67,9 +67,9 @@ const billsService = {
     )
     .then(bills => bills)
     .catch(err => console.log(err));
-
     let billsReturn = [];
     let dates = [];
+    let totalExpense = 0;
     bills.forEach(bill => {
       if (!billsReturn.find(billReturn => billReturn.id === bill.id)) {
         const createdOn = dateFormat.change(bill.createdOn);
@@ -90,6 +90,8 @@ const billsService = {
           paidOut: 0,
           debtors: [],
         });
+
+        totalExpense += bill.payment;
       }
 
       const billsReturnIndex = (
@@ -112,7 +114,10 @@ const billsService = {
       });
     });
 
-    return billsReturn;
+    return {
+      billsReturn,
+      totalExpense: ((search && search.name) ? totalExpense : 0)
+    };
   },
   create: async function(userId, payment, description, isPaymentEqual, date) {
     if (!userId || !description || !payment) {
