@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const billsService = require('../services/bills');
 const debtorService = require('../services/debtor');
 const dateFormat = require('../lib/dateFormat');
-const debtorDefault = 'yo';
+const DEBTOR_DEFAULT_NAME = 'yo';
 
 function billsRoute(app) {
   const router = express.Router();
@@ -56,7 +56,7 @@ function billsRoute(app) {
       return;
     }
 
-    const debtorId = await debtorService.create(debtorDefault);
+    const debtorId = await debtorService.create(DEBTOR_DEFAULT_NAME);
     const debtorInBillId = await (
       debtorService
       .addInBill(debtorId, billId, billData.payment, true)
@@ -64,7 +64,7 @@ function billsRoute(app) {
 
     jsonReturn.debtors = [{
       id: debtorInBillId,
-      name: debtorDefault,
+      name: DEBTOR_DEFAULT_NAME,
       paid: true,
       expense: billData.payment,
     }];
