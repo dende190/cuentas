@@ -40,34 +40,54 @@ function usersRoute(app) {
     res.status(200).json({login: true, token: token});
   });
 
-  router.post('/obtener_listado', async (req, res, next) => {
+  router.post('/obtenerConfiguracion', async (req, res, next) => {
     if (!req.body.token) {
       res.status(301).json({error: true});
       return;
     }
 
-    const userList = await usersServices.getAll();
-    res.status(200).json(userList);
+    const userData = jwt.decode(req.body.token);
+    const configuration = await usersService.getConfiguration(userData.id);
+    res.status(200).json(configuration || {});
   });
 
-  router.post('/obtener_notas', async (req, res, next) => {
+  router.post('/guardarConfiguracion', async (req, res, next) => {
     if (!req.body.token) {
       res.status(301).json({error: true});
       return;
     }
 
-    const notes = await usersServices.getNotes(req.body.userId);
-    res.status(200).json({notes, userName: notes[0].userName});
+    const userData = jwt.decode(req.body.token);
+    const configurationValues = req.body.configuration;
+    const configuration = await (
+      usersService
+      .saveConfiguration(
+        userData.id,
+        configurationValues.salary,
+        configurationValues.payday,
+        configurationValues.percentageAlertExpense
+      )
+    );
+
+    if (configuration.user_id) {
+      delete configuration.user_id;
+    }
+
+    res.status(200).json(configuration || {});
   });
 
-  router.post('/cerrar_sesion', async (req, res, next) => {
+  router.post('/obtenerSueldosActualYGastos', async (req, res, next) => {
     if (!req.body.token) {
       res.status(301).json({error: true});
       return;
     }
 
-    const notes = await usersServices.getNotes(req.body.userId);
-    res.status(200).json({notes, userName: notes[0].userName});
+    const userData = jwt.decode(req.body.token);
+    const currentSalaryAndBills = await (
+      usersService
+      .getCurrentSalaryAndBills(userData.id)
+    );
+    res.status(200).json(currentSalaryAndBills);
   });
 }
 

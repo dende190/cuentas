@@ -1,97 +1,151 @@
 const mysqlLib = require('../lib/mysql');
+const DEBTOR_DEFAULT_ID = 1;
+const PAY_DAY = 30;
+const SALARY = 0;
+const PERCENTAGE_ALERT_EXPENSE = 70;
 
 const usersService = {
-  getAll: async function() {
-    const date = new Date();
-    const today = (
-      date.getFullYear() +
-      '-' +
-      (
-        date.getMonth() > 10 ?
-        (date.getMonth() + 1) :
-        ('0' + (date.getMonth() + 1))
-      ) +
-      '-' +
-      date.getDate()
-    );
-    const users = await mysqlLib.select(
+  getConfiguration: async function(userId, returnId = false) {
+    const configuration = await mysqlLib.selectRow(
       [
-        'u.id',
-        (
-          'CONCAT( ' +
-            'COALESCE(u.firstname, ""), ' +
-            '" ", ' +
-            'COALESCE(u.lastname, "") ' +
-          ') name'
-        ),
-        'COUNT(n.id) notesCount',
+        'id',
+        'salary',
+        'payday',
+        'percentage_alert_expense percentageAlertExpense',
       ],
+      ['user_configuration'],
       [
-        'user u',
-        (
-          'LEFT JOIN ' +
-            'note n ON ' +
-            'n.user_id = u.id AND ' +
-            'n.created_on > ? AND ' +
-            'n.created_on < ? '
-        ),
-      ],
-      [
-        ['u.status', 1],
-      ],
-      [
-        (today + ' 00:00:00'),
-        (today + ' 23:59:59'),
-      ],
-      [
-        'GROUP BY u.id',
+        ['user_id', userId],
       ]
-
     )
-    .then(usersResult => usersResult)
+    .then(configurationData => configurationData)
     .catch(err => console.log(err));
 
-    return users;
-  },
-  getNotes: async function(userId) {
-    if (!userId) {
-      return [];
+    if (returnId) {
+      return (configuration ? configuration.id : 0);
     }
 
-    const notes = await mysqlLib.select(
+    delete configuration.id;
+    return configuration;
+  },
+  saveConfiguration: async function(
+    userId,
+    salary,
+    payday,
+    percentageAlertExpense
+  ) {
+    if (!userId || (!salary && !payday && !percentageAlertExpense)) {
+      return;
+    }
+
+    let configurationValues = {
+      user_id: userId,
+    };
+    if (salary) {
+      configurationValues.salary = salary;
+    }
+
+    if (payday) {
+      configurationValues.payday = payday;
+    }
+
+    if (percentageAlertExpense) {
+      configurationValues.percentage_alert_expense = percentageAlertExpense;
+    }
+
+    const configurationId = await this.getConfiguration(userId, true)
+    if (!configurationId) {
+      const userId = await mysqlLib.insert(
+        configurationValues,
+        'user_configuration'
+      ).then(userId => userId)
+      .catch(err => console.log(err));
+
+      return configurationValues;
+    }
+
+    await mysqlLib.update(
+      configurationValues,
+      [
+        ['id', configurationId]
+      ],
+      'user_configuration'
+    );
+
+    return configurationValues;
+  },
+  getCurrentSalaryAndBills: async function(userId) {
+    const configuration = await this.getConfiguration(userId);
+    let payday = PAY_DAY;
+    let salary = SALARY;
+    let percentageAlertExpense = PERCENTAGE_ALERT_EXPENSE;
+    if (configuration) {
+      payday = configuration.payday
+      salary = configuration.salary
+      percentageAlertExpense = configuration.percentageAlertExpense;
+    }
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const lastMonth = (today.getMonth() === 0 ? 12 : today.getMonth());
+    const totalBills = await mysqlLib.selectRow(
       [
         (
-          'CONCAT( ' +
-            'COALESCE(u.firstname, ""), ' +
-            '" ", ' +
-            'COALESCE(u.lastname, "") ' +
-          ') userName'
+          'SUM(' +
+            'IF(' +
+              'debtor_id = ' + DEBTOR_DEFAULT_ID + ' AND paid = 1, ' +
+              'expense, ' +
+              'IF(' +
+                'debtor_id != ' + DEBTOR_DEFAULT_ID + ' AND paid = 0, ' +
+                'expense, ' +
+                '0' +
+              ')' +
+            ')' +
+          ') totalBills'
         ),
-        'n.id',
-        'n.title',
-        'n.content',
-        'DATE_FORMAT(n.created_on, "%Y-%m-%d") createdDate',
       ],
+      ['bill_debtor'],
       [
-        'note n',
-        'JOIN user u ON u.id = n.user_id',
-      ],
-      [
-        ['n.status', 1],
+        ['status', 1],
         'AND',
-        ['n.public', 1],
-        'AND',
-        ['n.user_id', '?'],
-        'AND',
-        ['u.status', 1],
-      ],
-      [userId]
+        [
+          'modified_on',
+          (
+            '"' +
+            (
+              (lastMonth === 12 ? currentYear - 1 : currentYear) +
+              '-' +
+              lastMonth +
+              '-' +
+              payday
+            )  +
+            '" AND "' +
+              (
+                currentYear +
+                '-' +
+                (lastMonth + 1) +
+                '-' +
+                payday
+              ) +
+            '"'
+          ),
+          'BETWEEN',
+          false
+        ],
+      ]
     )
-    .then(notesResult => notesResult)
+    .then(currentBillsData => currentBillsData.totalBills)
     .catch(err => console.log(err));
 
-    return notes;
-  }
+    const currentSalary = (salary - totalBills);
+    return {
+      currentSalary,
+      totalBills,
+      alertExpense: (
+        (salary - (salary * (percentageAlertExpense / 100))) >= currentSalary
+      ),
+    };
+  },
 };
 
 module.exports = usersService;
