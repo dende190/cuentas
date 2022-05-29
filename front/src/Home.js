@@ -1,4 +1,4 @@
-import {Fragment, useState, useEffect} from 'react';
+import {Fragment, useState, useEffect, useRef} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './components/Header';
 import Bill from './components/Bill';
@@ -35,6 +35,15 @@ function Home() {
       alertExpense: false,
     })
   );
+  const searchInit = {
+    name: '',
+    withoutPay: false,
+    searchOnlyDebtors: false,
+  };
+  const [search, setSearch] = useState(searchInit);
+  const [totalExpense, setTotalExpense] = useState(0);
+  const dFormSearch = useRef();
+  const dFormSearchButtonSubmit = useRef();
   useEffect(async () => {
     const billsRequest = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/obtener`,
@@ -102,6 +111,9 @@ function Home() {
     );
 
     const billDataJson = await billDataResponse.json();
+    if (search.name) {
+      await handlerResetSearch();
+    }
     const billSort = (
       [billDataJson.bill, ...billsList]
       .sort((after, before) => {
@@ -169,6 +181,46 @@ function Home() {
     });
   };
 
+  const handlerSubmitSearch = async (event) => {
+    event.preventDefault();
+    const billsRequest = await fetch(
+      `${process.env.REACT_APP_URL_API}deuda/obtener`,
+      {
+        method: 'post',
+        body: JSON.stringify({token: localStorage.token, search}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+    );
+
+    const {billsReturn, totalExpense} = await billsRequest.json();
+    setBillsList(billsReturn);
+    setTotalExpense(totalExpense);
+  };
+
+  const handlerChangeSearch = (event) => {
+    setSearch({
+      ...search,
+      name: event.target.value,
+    });
+  };
+
+  const handlerChangeCheckbox = (event) => {
+    const dCheckbox = event.target;
+    setSearch({
+      ...search,
+      [dCheckbox.name]: dCheckbox.checked,
+    });
+    console.log(search);
+  };
+
+  const handlerResetSearch = async () => {
+    await setSearch(searchInit);
+    dFormSearch.current.reset();
+    dFormSearchButtonSubmit.current.click();
+  };
+
   return (
     <Fragment>
       <Header
@@ -222,6 +274,58 @@ function Home() {
             Agregar
           </button>
         </form>
+        <div>
+          <form
+            method="post"
+            className="form_search"
+            ref={dFormSearch}
+            onSubmit={handlerSubmitSearch}
+          >
+            <div className="form_search-inputs">
+              <input
+                className="form_search-input"
+                type="search"
+                name="search"
+                value={search.name}
+                placeholder="Buscar..."
+                onChange={handlerChangeSearch}
+              />
+              <div>
+                <label className="form_search-checkbox_without_pay">
+                  Solo deudas sin pagar
+                  <input
+                    type="checkbox"
+                    name="withoutPay"
+                    defaultChecked={search.withoutPay}
+                    onChange={handlerChangeCheckbox}
+                  />
+                </label>
+                <label>
+                  Solo deudores
+                  <input
+                    type="checkbox"
+                    name="searchOnlyDebtors"
+                    defaultChecked={search.searchOnlyDebtors}
+                    onChange={handlerChangeCheckbox}
+                  />
+                </label>
+              </div>
+            </div>
+            <button
+              className="form_search-button"
+              ref={dFormSearchButtonSubmit}
+            >
+              Buscar
+            </button>
+            <button
+              type="button"
+              className="form_search-button_delete"
+              onClick={handlerResetSearch}
+            >
+              Borrar Filtro
+            </button>
+          </form>
+        </div>
         {
           billsList.length ?
           (

@@ -1,5 +1,6 @@
 const mysqlLib = require('../lib/mysql');
 const dateFormat = require('../lib/dateFormat');
+const DEBTOR_DEFAULT_ID = 1;
 
 const billsService = {
   isPaymentEqual: async function(billId) {
@@ -18,7 +19,30 @@ const billsService = {
     }
     return (billData.isPaymentEqual === 1);
   },
-  getAllForUser: async function(userId) {
+  getAllForUser: async function(userId, search) {
+    let condition = [
+      ['b.user_id', userId],
+      'AND',
+      ['b.status', 1],
+    ];
+
+    let conditionFilter = [];
+    if (search && search.name) {
+      let whereSearch = ('(d.name LIKE "%' + search.name + '%"');
+
+      if (!search.searchOnlyDebtors) {
+        whereSearch += (' OR b.description LIKE "%' + search.name + '%"');
+      }
+
+      whereSearch += ')';
+      conditionFilter.push('AND', whereSearch);
+    }
+
+    if (search && search.withoutPay) {
+      conditionFilter.push('AND', ['bd.paid', 0]);
+    }
+
+    condition = condition.concat(conditionFilter);
     const bills = await mysqlLib.select(
       [
         'b.id',
@@ -36,11 +60,7 @@ const billsService = {
         'LEFT JOIN bill_debtor bd ON bd.bill_id = b.id AND bd.status = 1',
         'LEFT JOIN debtor d ON d.id = bd.debtor_id',
       ],
-      [
-        ['b.user_id', userId],
-        'AND',
-        ['b.status', 1],
-      ],
+      condition,
       [
         'ORDER BY b.created_on DESC',
       ]

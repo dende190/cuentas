@@ -58,6 +58,56 @@
   font-size: 18px;
 }
 
+.form_search {
+  padding: 16px;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+}
+
+.form_search-inputs {
+  padding: 8px;
+  background-color: #ededed;
+  border-radius: 10px;
+  width: 30%;
+}
+
+.form_search-input {
+  background: #f3f2f2;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  margin-right: 15px;
+  width: 100%;
+}
+
+.form_search-checkbox_without_pay {
+  margin-right: 16px;
+}
+
+.form_search-button {
+  background-color: #ea5676;
+  border: none;
+  padding: 4px;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.form_search-button_delete {
+  margin-left: 16px;
+  background-color: #cccccc;
+  border: none;
+  padding: 4px;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
 @media (max-width: 427px) {
   .bill_input {
     margin-bottom:10px;
