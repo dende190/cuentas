@@ -1,14 +1,16 @@
+import {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import generateExcel from '../utils/generateExcel';
 import '../styles/Header.css'
 import addDotInNumberText from './../utils/addDotInNumberText';
 
 function Header({
+  isHome,
   showConfiguration,
   setShowConfiguration,
   userCurrentSalaryAndBills,
   totalExpense,
-  totalBill
+  totalBill,
 }) {
   const handlerDownloadBillsReport = async function() {
     const billsReport = await fetch(
@@ -37,41 +39,61 @@ function Header({
 
   return (
     <header className="header">
-      <div className="bills_information">
-        <h3
-          className={
-            'bills_information-current_salary' +
-            (userCurrentSalaryAndBills.alertExpense ? ' -alert' : '')
-          }>
-          Sueldo Actual:
-          {addDotInNumberText(userCurrentSalaryAndBills.currentSalary)}
-        </h3>
-        <h3 className="bills_information-total_expense">
-          Gastos:
-          {(
-            totalExpense ?
-            addDotInNumberText(totalExpense) :
-            addDotInNumberText(userCurrentSalaryAndBills.totalBills)
-          )}
-        </h3>
-        {
-          totalBill > 0 ?
-          (
-            <h3 className="bills_information-total_bills">
-              Deuda:
-              {addDotInNumberText(totalBill)}
+      {
+        isHome &&
+        (
+          <div className="bills_information">
+            <h3
+              className={
+                'bills_information-current_salary' +
+                (userCurrentSalaryAndBills.alertExpense ? ' -alert' : '')
+              }>
+              Sueldo Actual:
+              {addDotInNumberText(userCurrentSalaryAndBills.currentSalary)}
             </h3>
-          ) :
-          ''
-        }
-      </div>
+            <h3 className="bills_information-total_expense">
+              Gastos:
+              {(
+                totalExpense ?
+                addDotInNumberText(totalExpense) :
+                addDotInNumberText(userCurrentSalaryAndBills.totalBills)
+              )}
+            </h3>
+            {
+              totalBill > 0 ?
+              (
+                <h3 className="bills_information-total_bills">
+                  Deuda:
+                  {addDotInNumberText(totalBill)}
+                </h3>
+              ) :
+              ''
+            }
+          </div>
+        )
+      }
       <div className="header-links">
-        <button
-          className="header_button links"
-          onClick={handlerShowModal}
-        >
-          Configuracion
-        </button>
+        {
+          isHome ?
+          (
+            <Fragment>
+              <Link className="header_button links" to="/mensualidades">
+                Mensualidades
+              </Link>
+              <button
+                className="header_button links"
+                onClick={handlerShowModal}
+              >
+                Configuracion
+              </button>
+            </Fragment>
+          ) :
+          (
+            <Link className="header_button links" to="/">
+              Inicio
+            </Link>
+          )
+        }
         <button
           className="header_button links"
           onClick={handlerDownloadBillsReport}

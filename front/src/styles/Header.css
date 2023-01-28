@@ -64,15 +64,21 @@
 }
 
 @media (max-width: 450px) {
+  .header {
+    display: block;
+    padding: 36px 0 0;
+  }
+
   .bills_information {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    margin-bottom: 4px;
   }
 
   .bills_information-current_salary {
-    margin-top: -20px;
+    margin-top: -26px;
   }
 
   .bills_information-total_expense {
@@ -84,7 +90,10 @@
   }
 
   .header-links {
-    display: inherit;
+    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
   }
 
   .links {

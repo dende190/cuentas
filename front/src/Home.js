@@ -245,6 +245,7 @@ function Home() {
   return (
     <Fragment>
       <Header
+        isHome={true}
         showConfiguration={showConfiguration}
         setShowConfiguration={setShowConfiguration}
         userCurrentSalaryAndBills={userCurrentSalaryAndBills}
