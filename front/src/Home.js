@@ -17,6 +17,8 @@ function Home() {
     paymentWithDot: '',
     date: '',
     isPaymentEqual: true,
+    isMonthlyPayment: false,
+    monthlyAmount: '',
   };
   const [billsList, setBillsList] = useState([]);
   const [bill, setBill] = useState(billInit);
@@ -45,6 +47,7 @@ function Home() {
   const [totalBill, setTotalBill] = useState(0);
   const dFormSearch = useRef();
   const dFormSearchButtonSubmit = useRef();
+  const dMonthlyAmount = useRef();
   useEffect(async () => {
     const billsRequest = await fetch(
       `${process.env.REACT_APP_URL_API}deuda/obtener`,
@@ -182,6 +185,23 @@ function Home() {
     });
   };
 
+  const handlerChangeBillMonthlyPayment = (event) => {
+    const isMonthlyPayment = event.target.checked;
+    setBill({
+      ...bill,
+      isMonthlyPayment,
+    });
+
+    dMonthlyAmount.current.hidden = !isMonthlyPayment;
+  };
+
+  const handlerChangeBillMonthlyAmount = (event) => {
+    setBill({
+      ...bill,
+      monthlyAmount: event.target.value,
+    });
+  };
+
   const handlerSubmitSearch = async (event) => {
     event.preventDefault();
     const billsRequest = await fetch(
@@ -270,6 +290,25 @@ function Home() {
                 onChange={handlerChangeBillPaymentEqual}
               />
             </label>
+            <label className="bill_checkbox_container">
+              Pago mensualidad:
+              <input
+                className="bill_checkbox"
+                type="checkbox"
+                defaultChecked={bill.isMonthlyPayment}
+                onChange={handlerChangeBillMonthlyPayment}
+              />
+            </label>
+            <input
+              className="bill_input"
+              type="tel"
+              name="amountMonthly"
+              placeholder="Mensualidad cantidad"
+              hidden={true}
+              value={bill.monthlyAmount}
+              onChange={handlerChangeBillMonthlyAmount}
+              ref={dMonthlyAmount}
+            />
           </div>
           <button disabled={buttonDisabled} className="bill_button">
             Agregar

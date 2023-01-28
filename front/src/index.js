@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
+import Monthly from './Monthly';
 import reportWebVitals from './reportWebVitals';
 import './styles/global.css';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Route exact path="/" element={<Home />} />
         <Route exact path="/iniciar_sesion" element={<Login />} />
         <Route exact path="/registrarse" element={<Signup />} />
+        <Route exact path="/Mensualidades" element={<Monthly />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

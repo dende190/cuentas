@@ -1,0 +1,45 @@
+.monthly_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.monthly_list-title {
+  margin: 0;
+}
+
+.monthly_list-amount_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.monthly_list-input {
+  background-color: #ea5676;
+  border: none;
+  padding: 4px;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.monthly_list-amount {
+  margin-right: 16px;
+}
+
+@media (max-width: 450px) {
+  .monthly_list-amount_container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+
+  .monthly_list-amount {
+    margin-right: 0;
+  }
+}
