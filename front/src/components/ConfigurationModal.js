@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import '../styles/ConfigurationModal.css'
 import addDotInNumberText from './../utils/addDotInNumberText';
 

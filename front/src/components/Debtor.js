@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import '../styles/Debtor.css';
 import Trash from '../img/trash.png';
 import addDotInNumberText from './../utils/addDotInNumberText';

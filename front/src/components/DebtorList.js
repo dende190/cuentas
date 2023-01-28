@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import Debtor from './Debtor';
 import '../styles/DebtorList.css';
 
