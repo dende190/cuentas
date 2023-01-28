@@ -331,7 +331,7 @@ function Home() {
                 placeholder="Buscar..."
                 onChange={handlerChangeSearch}
               />
-              <div>
+              <div className="form_search-container_checkbox">
                 <label className="form_search-checkbox_without_pay">
                   Solo deudas sin pagar
                   <input
