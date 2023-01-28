@@ -8,6 +8,7 @@ const billsRoute = require('./routes/bills');
 const usersRoute = require('./routes/users');
 const debtorRoute = require('./routes/debtor');
 const analyticsRoute = require('./routes/analytics');
+const monthlyRoute = require('./routes/monthly');
 
 // Middlewares
 app.use(express.json());
@@ -23,6 +24,7 @@ usersRoute(app);
 billsRoute(app);
 debtorRoute(app);
 analyticsRoute(app);
+monthlyRoute(app);
 
 app.listen(process.env.PORT, () => {
   console.log('Servidor escuchando en el puerto', process.env.PORT);

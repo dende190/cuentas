@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const billsService = require('../services/bills');
 const debtorService = require('../services/debtor');
 const usersService = require('../services/users');
+const monthlyService = require('../services/monthly');
 const dateFormat = require('../lib/dateFormat');
 const DEBTOR_DEFAULT_NAME = 'yo';
 
@@ -37,7 +38,7 @@ function billsRoute(app) {
       billData.payment,
       billData.description,
       billData.isPaymentEqual,
-      billData.date
+      billData.date,
     );
     const createdOn = (billData.date || new Date());
     let bill = {
@@ -51,6 +52,11 @@ function billsRoute(app) {
       dateShow: (billData.date === ''),
       debtors: [],
     };
+
+    const monthlyAmount = billData.monthlyAmount;
+    if (monthlyAmount) {
+      monthlyService.create(billId, monthlyAmount);
+    }
 
     if (!billData.isPaymentEqual) {
       (
