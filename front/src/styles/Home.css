@@ -35,6 +35,7 @@
   padding: 12px;
   font-size: 16px;
   margin-right: 15px;
+  border-radius: 8px;
 }
 
 .bill_button {
@@ -97,7 +98,7 @@
 }
 
 .form_search-button_delete {
-  margin-left: 16px;
+  margin-left: 5px;
   background-color: #cccccc;
   border: none;
   padding: 4px;
@@ -109,15 +110,16 @@
 }
 
 @media (max-width: 450px) {
-  .bill_input {
-    margin-bottom:10px;
-    height: 8px;
+  .container_payment_data {
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
 
-  .bill_input.date {
+  .bill_input {
+    margin-bottom: 10px;
     height: 8px;
-    width: 98%;
+    margin-right: 0;
   }
 
   .form_search-inputs {
@@ -138,11 +140,15 @@
 
   .bill_checkbox_container {
     font-size: 14px;
+    margin-bottom: 10px;
   }
-}
 
-@media (max-width: 375px) {
-  .bill_input.date {
-    width: 82%;
+  .form_search-container_checkbox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form_search-checkbox_without_pay {
+    margin-bottom: 10px;
   }
 }
